@@ -1,0 +1,49 @@
+/* TELA LOGIN */
+#login {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    background-color: whitesmoke;
+    mat-card {
+        width: 368px;
+        height: 404px;
+        padding: 48px 40px;
+        h1.mat-h1 {
+            margin-bottom: 0;
+            color: #f5821f;
+            font-weight: 500;
+        }
+    }
+}
+/* TELE DASHBOARD */
+mat-toolbar {
+    position: fixed;
+    top: 0;
+    right: 0;
+    left: 0;
+    z-index: 10;
+    box-shadow: 0 2px 5px #0000004d;
+    h1 {
+        font-family: Ubuntu;
+    }
+}
+mat-drawer-container {
+    min-height: 100%;
+    height: auto!important;
+}
+mat-drawer-container mat-drawer {
+    position: fixed;
+    top: 64px;
+    bottom: 0;
+    left: 0;
+    min-width: 260px;
+}
+mat-drawer-container mat-drawer-content {
+    padding: 64px 0;
+}
+h1 small {
+    font-family: Roboto;
+    color: whitesmoke;
+    font-size: small;
+}

@@ -1,0 +1,52 @@
+<mat-toolbar>
+    <span>Entradas Estoque Veículos Zero km</span>
+</mat-toolbar>
+<mat-card>
+    <form id="entradaForm" [formGroup]="entradaForm" (ngSubmit)="onSubmit(entradaForm.value)">
+        <form>
+            <h2 class="mat-title" style="color: #f5821f">Dados da Moto</h2>
+            <p>
+                <mat-form-field appearance="fill">
+                    <mat-label>Chassi</mat-label>
+                    <input name="chassi" formControlName="chassi" matInput>
+                </mat-form-field>
+            </p>
+            <p>
+                <mat-form-field appearance="fill">
+                    <mat-label>KM hodômetro</mat-label>
+                    <input type="number" name="quilometragemHodometro" formControlName="quilometragemHodometro" matInput>
+                </mat-form-field>
+            </p>
+            <p>
+                <mat-form-field appearance="fill">
+                    <mat-label>Data de medição do Hodômetro</mat-label>
+                    <input type="datetime-local" name="dataHoraMedicaoHodometro" formControlName="dataHoraMedicaoHodometro" matInput>
+                </mat-form-field>
+            </p>
+            <h2 class="mat-title" style="color: #f5821f">Dados da NF-e</h2>
+            <p>
+                <mat-form-field appearance="fill">
+                    <mat-label>Chave da nota fiscal</mat-label>
+                    <input type="text" name="chaveNotaFiscal" formControlName="chaveNotaFiscal" matInput>
+                </mat-form-field>
+            </p>
+            <p>
+                <mat-form-field appearance="fill">
+                    <mat-label>Data de entrada de estoque</mat-label>
+                    <input type="datetime-local" name="dataEntradaEstoque" formControlName="dataEntradaEstoque" placeholder="00/00/0000" matInput>
+                </mat-form-field>
+            </p>
+            <p>
+                <mat-form-field appearance="fill">
+                    <mat-label>Valor da venda</mat-label>
+                    <span matPrefix>R$ &nbsp;</span>
+                    <input type="number" min="0.00" step="0.01" name="valorCompra" formControlName="valorCompra" matInput>
+                </mat-form-field>
+            </p>
+        </form>
+        <mat-card-actions>
+            <button type="reset" mat-button (click)="voltar();">Cancelar</button>
+            <button type="submit" mat-raised-button color="primary">Salvar</button>
+        </mat-card-actions>
+    </form>
+</mat-card>

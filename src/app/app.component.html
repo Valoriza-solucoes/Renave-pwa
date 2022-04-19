@@ -1,0 +1,63 @@
+<span *ngIf="isLogado; else telaLogin">
+  <mat-toolbar color="primary">
+    <button mat-icon-button aria-label="Menu" (click)="drawer.toggle()">
+      <mat-icon>menu</mat-icon>
+    </button>
+    <h1 style="margin-left: 15px;line-height: 16px;">Avelloz <small>Renave 0km</small></h1>
+    <span class="spacer"></span>
+    <button mat-icon-button class="example-icon favorite-icon" aria-label="Configurações" (click)="openDialog()">
+      <mat-icon>settings</mat-icon>
+    </button>
+  </mat-toolbar>
+
+  <mat-drawer-container>
+    <mat-drawer #drawer mode="side" opened>
+      <mat-nav-list role="list" style="padding-top: 0;height: 100%">
+        <div style="height: 8px;"></div>
+        <a mat-list-item role="listitem" routerLink="/">
+          <mat-icon mat-list-icon>receipt_long</mat-icon>
+          <div mat-line>Estoques</div>
+        </a>
+        <a mat-list-item role="listitem" routerLink="saidas-estoque-veiculo-zero-km">
+          <mat-icon mat-list-icon>two_wheeler</mat-icon>
+          <div mat-line>Venda</div>
+        </a>
+      </mat-nav-list>
+      <p style="text-align: center;margin-top: -56px;"><img src="assets/logo-avelloz.png" alt="Logo Avelloz" height="36"></p>
+    </mat-drawer>
+    <mat-drawer-content>
+      <router-outlet></router-outlet>
+    </mat-drawer-content>
+  </mat-drawer-container>
+</span>
+<ng-template #telaLogin>
+  <form [formGroup]="loginForm" id="login" (ngSubmit)="login()">
+    <mat-card>
+      <div style="text-align: center;">
+        <img src="assets/logo-avelloz.png" alt="Logo Avelloz" height="96">
+        <h1 class="mat-h1" style="margin-bottom: 16px;">Renave 0km</h1>
+        <h3 class="mat-h3" style="color: gray">Fazer login usando seu CNPJ e senha</h3>
+      </div>
+      <p>
+        <mat-form-field appearance="outline">
+          <mat-label>CNPJ</mat-label>
+          <input name="cnpj" matInput placeholder="99.999.999/9999-99" formControlName="cnpj">
+          <mat-icon matSuffix>sports_motorsports</mat-icon>
+          <mat-error>Campo obrigatório</mat-error>
+        </mat-form-field>
+      </p>
+      <p>
+        <mat-form-field appearance="outline">
+          <mat-label>Senha</mat-label>
+          <input name="pwd" type="password" matInput placeholder="*****" formControlName="pwd">
+          <mat-icon matSuffix>lock</mat-icon>
+          <mat-error>Campo obrigatório</mat-error>
+        </mat-form-field>
+      </p>
+      <mat-card-actions align="end">
+        <button type="submit" mat-button mat-raised-button color="primary" [disabled]="isCarregando"><mat-icon>login</mat-icon> {{isCarregando ? 'Logando...' : 'Entrar'}}</button>
+      </mat-card-actions>
+      <p class="mat-small" style="text-align: center;position: relative; bottom: -16px;color: gray"><small>Versão {{ prod ? '2022.03.30.3' : 'local'}}</small></p>
+    </mat-card>
+  </form>
+</ng-template>

@@ -1,0 +1,124 @@
+
+// Custom Theming for Angular Material
+// For more information: https://material.angular.io/guide/theming
+@use '@angular/material' as mat;
+// Plus imports for other components in your app.
+
+$ubuntu-typography: mat.define-typography-config(
+  $font-family: "Ubuntu",
+);
+
+// Include the common styles for Angular Material. We include this here so that you only
+// have to load a single css file for Angular Material in your app.
+// Be sure that you only ever include this mixin once!
+@include mat.core();
+@include mat.button-typography($ubuntu-typography);
+
+.mat-h1,
+.mat-h2 {
+  font-family: mat.font-family($ubuntu-typography);
+}
+
+/* For use in src/lib/core/theming/_palette.scss */
+$md-darkcornflowerblue: (
+    50 : #e1e8f1,
+    100 : #b5c5db,
+    200 : #849fc4,
+    300 : #5279ac,
+    400 : #2d5c9a,
+    500 : #083f88,
+    600 : #073980,
+    700 : #063175,
+    800 : #04296b,
+    900 : #021b58,
+    A100 : #8aa2ff,
+    A200 : #577aff,
+    A400 : #2451ff,
+    A700 : #0a3dff,
+    contrast: (
+        50 : #000000,
+        100 : #000000,
+        200 : #000000,
+        300 : #ffffff,
+        400 : #ffffff,
+        500 : #ffffff,
+        600 : #ffffff,
+        700 : #ffffff,
+        800 : #ffffff,
+        900 : #ffffff,
+        A100 : #000000,
+        A200 : #ffffff,
+        A400 : #ffffff,
+        A700 : #ffffff,
+    )
+);
+$md-princetonorange: (
+    50 : #fef0e4,
+    100 : #fcdabc,
+    200 : #fac18f,
+    300 : #f8a862,
+    400 : #f79541,
+    500 : #f5821f,
+    600 : #f47a1b,
+    700 : #f26f17,
+    800 : #f06512,
+    900 : #ee520a,
+    A100 : #ffffff,
+    A200 : #ffebe4,
+    A400 : #ffc6b1,
+    A700 : #ffb397,
+    contrast: (
+        50 : #000000,
+        100 : #000000,
+        200 : #000000,
+        300 : #000000,
+        400 : #000000,
+        500 : #ffffff,
+        600 : #ffffff,
+        700 : #ffffff,
+        800 : #ffffff,
+        900 : #ffffff,
+        A100 : #000000,
+        A200 : #000000,
+        A400 : #000000,
+        A700 : #000000,
+    )
+);
+
+// Define the palettes for your theme using the Material Design palettes available in palette.scss
+// (imported above). For each palette, you can optionally specify a default, lighter, and darker
+// hue. Available color palettes: https://material.io/design/color/
+$avelloz-renave-primary: mat.define-palette($md-darkcornflowerblue);
+$avelloz-renave-accent: mat.define-palette($md-princetonorange);
+
+// The warn palette is optional (defaults to red).
+$avelloz-renave-warn: mat.define-palette(mat.$red-palette);
+
+// Create the theme object. A theme consists of configurations for individual
+// theming systems such as "color" or "typography".
+$avelloz-renave-theme: mat.define-light-theme((
+  color: (
+    primary: $avelloz-renave-primary,
+    accent: $avelloz-renave-accent,
+    warn: $avelloz-renave-warn,
+  )
+));
+
+// Include theme styles for core and each component used in your app.
+// Alternatively, you can import and @include the theme mixins for each component
+// that you are using.
+@include mat.all-component-themes($avelloz-renave-theme);
+
+/* You can add global styles to this file, and also import other style files */
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto; }
+a { text-decoration: none; }
+h1.mat-display-1, h2.mat-title, h1.mat-h1, h3.mat-h3 { font-family: Ubuntu !important; }
+mat-form-field { width: 100%;}
+mat-toolbar > .spacer {
+      flex: 1 1 auto;
+}
+mat-drawer-content mat-card {
+    margin: 16px;
+}

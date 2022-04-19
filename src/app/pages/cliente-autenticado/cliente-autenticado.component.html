@@ -1,0 +1,40 @@
+<h2 mat-dialog-title>Usuário Autenticado</h2>
+<mat-dialog-content class="mat-typography">
+    <mat-list role="list">
+        <div mat-subheader>Dados do usuário</div>
+        <mat-list-item role="listitem">
+            <div mat-line>CNPJ</div>
+            <div mat-line>{{clienteAutenticado.cnpj}}</div>
+        </mat-list-item>
+        <mat-list-item role="listitem">
+            <div mat-line>Nome</div>
+            <div mat-line>{{clienteAutenticado.nome}}</div>
+        </mat-list-item>
+        <mat-divider></mat-divider>
+        <div mat-subheader>Endereço</div>
+        <mat-list-item role="listitem">
+            <div mat-line>CEP</div>
+            <div mat-line>{{clienteAutenticado.endereco.cep}}</div>
+        </mat-list-item>
+        <mat-list-item role="listitem">
+            <div mat-line>Logradouro</div>
+            <div mat-line>{{clienteAutenticado.endereco.logradouro}}</div>
+        </mat-list-item>
+        <mat-list-item role="listitem">
+            <div mat-line>Complemento</div>
+            <div mat-line>{{clienteAutenticado.endereco.complemento}}</div>
+        </mat-list-item>
+        <mat-list-item role="listitem">
+            <div mat-line>Bairro</div>
+            <div mat-line>{{clienteAutenticado.endereco.bairro}}</div>
+        </mat-list-item>
+        <mat-list-item role="listitem">
+            <div mat-line>Município</div>
+            <div mat-line>{{clienteAutenticado.endereco.municipio.nome}} - {{clienteAutenticado.endereco.municipio.uf}}</div>
+        </mat-list-item>
+    </mat-list>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+    <!-- <button mat-button mat-dialog-close>Cancelar</button> -->
+    <button mat-button [mat-dialog-close]="true" cdkFocusInitial>Fechar</button>
+</mat-dialog-actions>

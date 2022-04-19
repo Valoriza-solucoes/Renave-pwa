@@ -1,0 +1,134 @@
+<mat-toolbar>
+    <span>Saídas Estoque Veículos Zero km</span>
+    <span class="spacer"></span>
+    <button mat-raised-button color="primary" (click)="fileInput.click()" [disabled]="isCarregando">
+        <mat-icon>file_upload</mat-icon> Fiscal eletrônica
+    </button>
+    <input hidden (change)="onFileSelected()" #fileInput type="file" id="file" accept="text/xml">
+</mat-toolbar>
+<mat-card>
+    <div class="table">
+        <div class="row">
+            <div class="col" style="width: 62%;padding-right: 16px;">
+                <h2 class="mat-title" style="color: #083f88">Dados do Comprador</h2>
+                <form autocomplete="off" #formSaida>
+                    <p>
+                        <mat-form-field appearance="outline">
+                            <mat-label>Nome</mat-label>
+                            <input name="saidasEstoqueVeiculoZeroKm.comprador.nome" matInput
+                                [value]="saidasEstoqueVeiculoZeroKm.comprador.nome">
+                        </mat-form-field>
+                    </p>
+                    <p>
+                        <mat-form-field appearance="outline">
+                            <mat-label>E-mail</mat-label>
+                            <input name="email" type="email" matInput
+                                [value]="saidasEstoqueVeiculoZeroKm.comprador.email">
+                        </mat-form-field>
+                    </p>
+                    <p>
+                        <mat-label>Tipo do documento</mat-label>
+                    </p>
+                    <p>
+                        <mat-radio-group name="tipoDocumento" aria-label="Tipo Documento"
+                            [value]="saidasEstoqueVeiculoZeroKm.comprador.tipoDocumento">
+                            <mat-radio-button value="CPF">CPF</mat-radio-button>
+                            <mat-radio-button value="CNPJ">CNPJ</mat-radio-button>
+                        </mat-radio-group>
+                    </p>
+                    <p>
+                        <mat-form-field appearance="outline">
+                            <mat-label>Número Documento</mat-label>
+                            <input name="numeroDocumento" type="tel" matInput
+                                [value]="saidasEstoqueVeiculoZeroKm.comprador.numeroDocumento">
+                        </mat-form-field>
+                    </p>
+                    <h2 class="mat-title" style="color: #083f88">Endereço</h2>
+                    <p>
+                        <mat-form-field appearance="outline">
+                            <mat-label>Logradouro</mat-label>
+                            <input name="logradouro" type="text" matInput
+                                [value]="saidasEstoqueVeiculoZeroKm.comprador.endereco.logradouro">
+                        </mat-form-field>
+                    </p>
+                    <p>
+                        <mat-form-field appearance="outline">
+                            <mat-label>Número</mat-label>
+                            <input name="numero" type="text" matInput
+                                [value]="saidasEstoqueVeiculoZeroKm.comprador.endereco.numero">
+                        </mat-form-field>
+                    </p>
+                    <p>
+                        <mat-form-field appearance="outline">
+                            <mat-label>Bairro</mat-label>
+                            <input name="bairro" type="text" matInput
+                                [value]="saidasEstoqueVeiculoZeroKm.comprador.endereco.bairro">
+                        </mat-form-field>
+                    </p>
+                    <p>
+                        <mat-form-field appearance="outline">
+                            <mat-label>CEP</mat-label>
+                            <input name="cep" type="text" matInput
+                                [value]="saidasEstoqueVeiculoZeroKm.comprador.endereco.cep">
+                        </mat-form-field>
+                    </p>
+                    <mat-form-field class="example-full-width" appearance="outline">
+                      <mat-label>Código do município</mat-label>
+                      <input matInput
+                             aria-label="Município"
+                             [matAutocomplete]="auto"
+                             [formControl]="municipioCtrl"
+                             role="presentation" autocomplete="off">
+                      <mat-autocomplete #auto="matAutocomplete">
+                        <mat-option *ngFor="let municipio of filteredMunicipio | async" [value]="municipio.id">
+                          <span>{{municipio.nome}}</span> -
+                          <small>{{municipio.uf}}</small>
+                        </mat-option>
+                      </mat-autocomplete>
+                    </mat-form-field>
+                </form>
+            </div>
+            <div class="col" style="width: 38%;">
+                <h2 class="mat-title" style="color: #f5821f">Dados da Moto</h2>
+                <p>
+                    <mat-form-field appearance="outline">
+                        <mat-label>Código do Estoque</mat-label>
+                        <input type="number" name="idEstoque" matInput [value]="saidasEstoqueVeiculoZeroKm.idEstoque">
+                    </mat-form-field>
+                </p>
+                <h2 class="mat-title" style="color: #f5821f">Dados da NF-e</h2>
+                <p>
+                    <mat-form-field appearance="outline">
+                        <mat-label>Chave da Nota Fiscal</mat-label>
+                        <input name="chaveNotaFiscal" matInput [value]="saidasEstoqueVeiculoZeroKm.chaveNotaFiscal">
+                    </mat-form-field>
+                </p>
+                <p>
+                    <mat-form-field appearance="outline">
+                        <mat-label>Data da venda</mat-label>
+                        <input type="datetime-local" name="dataVenda" matInput
+                            [value]="saidasEstoqueVeiculoZeroKm.dataVenda">
+                    </mat-form-field>
+                </p>
+                <p>
+                    <mat-form-field appearance="outline">
+                        <mat-label>Valor da venda</mat-label>
+                        <input type="number" name="valorVenda" matInput [value]="saidasEstoqueVeiculoZeroKm.valorVenda">
+                    </mat-form-field>
+                </p>
+                <h2 class="mat-title" style="color: #f5821f">Estabelecimento</h2>
+                <p>
+                    <mat-form-field appearance="outline">
+                        <mat-label>E-mail</mat-label>
+                        <input name="emailEstabelecimento" matInput
+                            [value]="saidasEstoqueVeiculoZeroKm.emailEstabelecimento">
+                    </mat-form-field>
+                </p>
+            </div>
+        </div>
+    </div>
+    <mat-card-actions>
+        <button type="reset" mat-button (click)="cancelar()">Cancelar</button>
+        <button mat-raised-button color="primary" (click)="salvar()" [disabled]="isCarregando">{{isCarregando ? 'Carregando...' : 'Salvar'}}</button>
+    </mat-card-actions>
+</mat-card>
