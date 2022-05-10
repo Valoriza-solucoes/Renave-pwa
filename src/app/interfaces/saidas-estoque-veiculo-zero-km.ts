@@ -6,6 +6,6 @@ export interface SaidasEstoqueVeiculoZeroKm {
     cpfOperadorResponsavel: string,
     dataVenda: string,
     emailEstabelecimento: string,
-    idEstoque: number,
+    idEstoque: number | null,
     valorVenda: number
 }

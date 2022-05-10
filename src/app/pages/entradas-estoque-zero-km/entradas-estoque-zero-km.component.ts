@@ -12,6 +12,7 @@ import { Usuario } from 'src/app/interfaces/usuario';
   styleUrls: ['./entradas-estoque-zero-km.component.scss']
 })
 export class EntradasEstoqueZeroKmComponent implements OnInit {
+  isCarregando = false;
   entradaForm: any;
 
   constructor(private location: Location, private formBuilder: FormBuilder, private http: HttpClient, private auth: AuthService) {
@@ -62,5 +63,7 @@ export class EntradasEstoqueZeroKmComponent implements OnInit {
       alert('Ocorreu algum problema com sua requisição! Verifique os campos preenchidos e tente novamente.');
     });
   }
+
+  onFileSelected() { }
 
 }

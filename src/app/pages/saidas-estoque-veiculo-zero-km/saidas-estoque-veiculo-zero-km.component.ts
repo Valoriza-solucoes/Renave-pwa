@@ -36,12 +36,11 @@ export class SaidasEstoqueVeiculoZeroKmComponent implements OnInit {
     cpfOperadorResponsavel: environment.cpfOperadorResponsavel,
     dataVenda: '',
     emailEstabelecimento: '',
-    idEstoque: 0,
+    idEstoque: null,
     valorVenda: 0
   };
 
   motoInline = '';
-  codProduto = '';
   municipioCtrl = new FormControl();
   filteredMunicipio: Observable<Municipio[]> | undefined;
   municipios: Municipio[] = municipios;
@@ -84,21 +83,10 @@ export class SaidasEstoqueVeiculoZeroKmComponent implements OnInit {
 
           const dados = xmlDoc.documentElement.firstChild!.firstChild!;
 
-          // CHASSI
-          this.saidasEstoqueVeiculoZeroKm.idEstoque = parseInt('0');
-          this.codProduto = xmlDoc.documentElement.getElementsByTagName('prod')[0].getElementsByTagName('cProd')[0].textContent!;
-          this.isCarregando = true;
-          this.estoque.resEstoqueChassi(this.codProduto).subscribe((res) => {
-            console.log(res);
-            if (Array.isArray(res) && res.length > 0) {
-              this.saidasEstoqueVeiculoZeroKm.idEstoque = res[0].id!;
-            }
-            this.isCarregando = false;
-          }, (err) => { this.isCarregando = false; alert(err.error.detalhe); });
-
+          // Dados do comprador
           const compradorDoc = xmlDoc.documentElement.getElementsByTagName('dest')[0];
           this.saidasEstoqueVeiculoZeroKm.comprador.nome = compradorDoc.getElementsByTagName('xNome')[0].textContent!;
-          this.saidasEstoqueVeiculoZeroKm.comprador.email = compradorDoc.getElementsByTagName('email')[0].textContent!;
+          this.saidasEstoqueVeiculoZeroKm.comprador.email = compradorDoc.getElementsByTagName('email').length ? compradorDoc.getElementsByTagName('email')[0].textContent! : '';
           if (compradorDoc.getElementsByTagName('CNPJ').length > 0) {
             this.saidasEstoqueVeiculoZeroKm.comprador.numeroDocumento = compradorDoc.getElementsByTagName('CNPJ')[0].textContent!;
             this.saidasEstoqueVeiculoZeroKm.comprador.tipoDocumento = 'CNPJ';
@@ -117,12 +105,31 @@ export class SaidasEstoqueVeiculoZeroKmComponent implements OnInit {
           this.saidasEstoqueVeiculoZeroKm.comprador.endereco.codigoMunicipio = parseInt(idMunicipio[0].id);
           this.saidasEstoqueVeiculoZeroKm.comprador.endereco.cep = endereco.getElementsByTagName('CEP')[0].textContent!;
 
+          // Dados da NF-e
           this.saidasEstoqueVeiculoZeroKm.chaveNotaFiscal = xmlDoc.getElementsByTagName('chNFe')[0].textContent!;
           this.saidasEstoqueVeiculoZeroKm.dataVenda = xmlDoc.getElementsByTagName('dhRecbto')[0].textContent!.substring(0, 19);
           this.saidasEstoqueVeiculoZeroKm.valorVenda = parseInt(xmlDoc.getElementsByTagName('vNF')[0].textContent!);
-          this.saidasEstoqueVeiculoZeroKm.emailEstabelecimento = xmlDoc.getElementsByTagName('infRespTec')[0].getElementsByTagName('email')[0].textContent!;
+          this.saidasEstoqueVeiculoZeroKm.emailEstabelecimento = xmlDoc.getElementsByTagName('infRespTec').length ? xmlDoc.getElementsByTagName('infRespTec')[0].getElementsByTagName('email')[0].textContent! : '';
           console.log('saidasEstoqueVeiculoZeroKm 2', this.saidasEstoqueVeiculoZeroKm);
 
+          // CHASSI
+          this.saidasEstoqueVeiculoZeroKm.idEstoque = null;
+          // Verifica se o produto no XML contém Veículo
+          const veicProd = xmlDoc.documentElement.getElementsByTagName('prod')[0].getElementsByTagName('veicProd');
+          let chassi;
+          this.isCarregando = true;
+          if (veicProd.length == 0) {
+            chassi = xmlDoc.documentElement.getElementsByTagName('prod')[0].getElementsByTagName('cProd')[0].textContent!;
+          } else { // Se tiver veicProd
+            chassi = veicProd[0].getElementsByTagName('chassi')[0].textContent!;
+          }
+          this.estoque.resEstoqueChassi(chassi).subscribe((res) => {
+            console.log(res);
+            if (Array.isArray(res) && res.length > 0) {
+              this.saidasEstoqueVeiculoZeroKm.idEstoque = res[0].id!;
+            }
+            this.isCarregando = false;
+          }, (err) => { this.isCarregando = false; alert(err.error.detalhe); });
         }
       }
       reader.readAsText(file, MIMEType);

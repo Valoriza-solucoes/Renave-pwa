@@ -2,7 +2,7 @@
     <span>Saídas Estoque Veículos Zero km</span>
     <span class="spacer"></span>
     <button mat-raised-button color="primary" (click)="fileInput.click()" [disabled]="isCarregando">
-        <mat-icon>file_upload</mat-icon> Fiscal eletrônica
+        <mat-icon>file_upload</mat-icon> Importar XML
     </button>
     <input hidden (change)="onFileSelected()" #fileInput type="file" id="file" accept="text/xml">
 </mat-toolbar>
