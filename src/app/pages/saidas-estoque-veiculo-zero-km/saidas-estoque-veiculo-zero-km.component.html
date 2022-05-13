@@ -10,18 +10,18 @@
     <mat-progress-bar color="accent" mode="indeterminate" *ngIf="isCarregando"></mat-progress-bar>
 </div>
 <mat-card *ngIf="saidasEstoqueVeiculoZeroKm.chaveNotaFiscal; else elseIf">
-    <mat-card-title style="color: #083f88">Dados da nota fiscal</mat-card-title>
+    <mat-card-title style="color: #112a6a">Dados da nota fiscal</mat-card-title>
     <mat-card-subtitle>{{fileName}}</mat-card-subtitle>
     <div class="table">
         <div class="row">
             <div class="col">
-                <h2 class="mat-title" style="color: #f5821f">Dados do Comprador</h2>
+                <h2 class="mat-title" style="color: #ff6610">Dados do Comprador</h2>
             </div>
         </div>
         <div class="row">
             <div class="col" style="width: 62%;padding-right: 16px;">
                 <mat-list>
-                    <div mat-subheader style="color: #083f88">Destinatário</div>
+                    <div mat-subheader style="color: #112a6a">Destinatário</div>
                     <mat-list-item>
                         <div mat-line>Nome</div>
                         <div mat-line>{{saidasEstoqueVeiculoZeroKm.comprador.nome}}</div>
@@ -38,7 +38,7 @@
             </div>
             <div class="col" style="width: 38%;">
                 <mat-list>
-                    <div mat-subheader style="color: #083f88">Endereço</div>
+                    <div mat-subheader style="color: #112a6a">Endereço</div>
                     <mat-list-item>
                         <div mat-line>Logradouro</div>
                         <div mat-line>{{saidasEstoqueVeiculoZeroKm.comprador.endereco.logradouro}},
@@ -61,7 +61,7 @@
         </div>
         <div class="row">
             <div class="col" style="width: 62%;padding-right: 16px;">
-                <h2 class="mat-title" style="color: #f5821f">Dados da NF-e</h2>
+                <h2 class="mat-title" style="color: #ff6610">Dados da NF-e</h2>
                 <mat-list>
                     <mat-list-item>
                         <div mat-line>Chave da Nota Fiscal</div>
@@ -78,7 +78,7 @@
                 </mat-list>
             </div>
             <div class="col" style="width: 38%;">
-                <h2 class="mat-title" style="color: #f5821f">Estabelecimento</h2>
+                <h2 class="mat-title" style="color: #ff6610">Estabelecimento</h2>
                 <mat-list>
                     <mat-list-item>
                         <div mat-line>E-mail</div>
@@ -89,7 +89,7 @@
         </div>
     </div>
     <div>
-        <h2 class="mat-title" style="color: #f5821f;margin-bottom: 0">Motos</h2>
+        <h2 class="mat-title" style="color: #ff6610;margin-bottom: 0">Motos</h2>
         <mat-list>
             <div mat-subheader>Moto #1</div>
             <mat-list-item>

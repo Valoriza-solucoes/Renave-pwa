@@ -18,23 +18,22 @@ $ubuntu-typography: mat.define-typography-config(
 .mat-h2 {
   font-family: mat.font-family($ubuntu-typography);
 }
-
 /* For use in src/lib/core/theming/_palette.scss */
 $md-darkcornflowerblue: (
-    50 : #e1e8f1,
-    100 : #b5c5db,
-    200 : #849fc4,
-    300 : #5279ac,
-    400 : #2d5c9a,
-    500 : #083f88,
-    600 : #073980,
-    700 : #063175,
-    800 : #04296b,
-    900 : #021b58,
-    A100 : #8aa2ff,
-    A200 : #577aff,
-    A400 : #2451ff,
-    A700 : #0a3dff,
+    50 : #e2e5ed,
+    100 : #b8bfd2,
+    200 : #8895b5,
+    300 : #586a97,
+    400 : #354a80,
+    500 : #112a6a,
+    600 : #0f2562,
+    700 : #0c1f57,
+    800 : #0a194d,
+    900 : #050f3c,
+    A100 : #7383ff,
+    A200 : #4055ff,
+    A400 : #0d28ff,
+    A700 : #001bf2,
     contrast: (
         50 : #000000,
         100 : #000000,
@@ -52,29 +51,30 @@ $md-darkcornflowerblue: (
         A700 : #ffffff,
     )
 );
+/* For use in src/lib/core/theming/_palette.scss */
 $md-princetonorange: (
-    50 : #fef0e4,
-    100 : #fcdabc,
-    200 : #fac18f,
-    300 : #f8a862,
-    400 : #f79541,
-    500 : #f5821f,
-    600 : #f47a1b,
-    700 : #f26f17,
-    800 : #f06512,
-    900 : #ee520a,
+    50 : #ffede2,
+    100 : #ffd1b7,
+    200 : #ffb388,
+    300 : #ff9458,
+    400 : #ff7d34,
+    500 : #ff6610,
+    600 : #ff5e0e,
+    700 : #ff530c,
+    800 : #ff4909,
+    900 : #ff3805,
     A100 : #ffffff,
-    A200 : #ffebe4,
-    A400 : #ffc6b1,
-    A700 : #ffb397,
+    A200 : #fff5f3,
+    A400 : #ffcac0,
+    A700 : #ffb4a7,
     contrast: (
         50 : #000000,
         100 : #000000,
         200 : #000000,
         300 : #000000,
         400 : #000000,
-        500 : #ffffff,
-        600 : #ffffff,
+        500 : #000000,
+        600 : #000000,
         700 : #ffffff,
         800 : #ffffff,
         900 : #ffffff,
@@ -84,7 +84,6 @@ $md-princetonorange: (
         A700 : #000000,
     )
 );
-
 // Define the palettes for your theme using the Material Design palettes available in palette.scss
 // (imported above). For each palette, you can optionally specify a default, lighter, and darker
 // hue. Available color palettes: https://material.io/design/color/
