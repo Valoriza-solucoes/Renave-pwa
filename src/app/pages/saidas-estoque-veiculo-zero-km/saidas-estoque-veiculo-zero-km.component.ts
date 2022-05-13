@@ -37,13 +37,15 @@ export class SaidasEstoqueVeiculoZeroKmComponent implements OnInit {
     dataVenda: '',
     emailEstabelecimento: '',
     idEstoque: null,
-    valorVenda: 0
+    valorVenda: null
   };
 
   motoInline = '';
+  cidadeUf = '';
   municipioCtrl = new FormControl();
   filteredMunicipio: Observable<Municipio[]> | undefined;
   municipios: Municipio[] = municipios;
+  fileName = '';
 
   constructor(private http: HttpClient, private auth: AuthService, private estoque: EstoqueService) {
     this.filteredMunicipio = this.municipioCtrl.valueChanges.pipe(
@@ -69,6 +71,7 @@ export class SaidasEstoqueVeiculoZeroKmComponent implements OnInit {
       const file = inputNode.files[0];
 
       var MIMEType = file.type;
+      this.fileName = file.name;
 
       var reader = new FileReader();
 
@@ -99,10 +102,11 @@ export class SaidasEstoqueVeiculoZeroKmComponent implements OnInit {
           this.saidasEstoqueVeiculoZeroKm.comprador.endereco.numero = endereco.getElementsByTagName('nro')[0].textContent!;
           this.saidasEstoqueVeiculoZeroKm.comprador.endereco.bairro = endereco.getElementsByTagName('xBairro')[0].textContent!;
           const municipio = endereco.getElementsByTagName('xMun')[0].textContent!;
+          const uf = endereco.getElementsByTagName('UF')[0].textContent!;
           console.log(municipio);
-          const idMunicipio = this.filtraMunicipio(municipio)
-          this.municipioCtrl.setValue(idMunicipio[0].id);
+          const idMunicipio = this.filtraMunicipio(municipio);
           this.saidasEstoqueVeiculoZeroKm.comprador.endereco.codigoMunicipio = parseInt(idMunicipio[0].id);
+          this.cidadeUf = municipio + '-' + uf;
           this.saidasEstoqueVeiculoZeroKm.comprador.endereco.cep = endereco.getElementsByTagName('CEP')[0].textContent!;
 
           // Dados da NF-e
@@ -129,7 +133,7 @@ export class SaidasEstoqueVeiculoZeroKmComponent implements OnInit {
               this.saidasEstoqueVeiculoZeroKm.idEstoque = res[0].id!;
             }
             this.isCarregando = false;
-          }, (err) => { this.isCarregando = false; alert(err.error.detalhe); });
+          }, (err) => { this.isCarregando = false; console.log(err.error.detalhe); });
         }
       }
       reader.readAsText(file, MIMEType);
@@ -162,6 +166,30 @@ export class SaidasEstoqueVeiculoZeroKmComponent implements OnInit {
 
   cancelar() {
     this.motoInline = '';
+    this.saidasEstoqueVeiculoZeroKm = {
+      chaveNotaFiscal: '',
+      comprador: {
+        email: '',
+        endereco: {
+          bairro: '',
+          cep: '',
+          codigoMunicipio: 0,
+          complemento: '',
+          logradouro: '',
+          numero: ''
+        },
+        nome: '',
+        numeroDocumento: '',
+        tipoDocumento: ''
+      },
+      cpfOperadorResponsavel: environment.cpfOperadorResponsavel,
+      dataVenda: '',
+      emailEstabelecimento: '',
+      idEstoque: null,
+      valorVenda: null
+    };
+    let file: any = document.getElementById('file');
+    file.value = '';
   }
 
 }

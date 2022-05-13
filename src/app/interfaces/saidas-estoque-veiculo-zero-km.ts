@@ -7,5 +7,5 @@ export interface SaidasEstoqueVeiculoZeroKm {
     dataVenda: string,
     emailEstabelecimento: string,
     idEstoque: number | null,
-    valorVenda: number
+    valorVenda: number | null
 }
