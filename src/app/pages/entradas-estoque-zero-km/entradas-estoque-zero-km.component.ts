@@ -88,9 +88,9 @@ export class EntradasEstoqueZeroKmComponent implements OnInit {
         const xmlDoc = new DOMParser().parseFromString(text, 'text/xml');
         console.log(xmlDoc);
         // Dados da NF-e
-        this.entrada.chaveNotaFiscal = xmlDoc.documentElement.getElementsByTagName("infNFe")[0].getAttribute("Id");
-        this.entrada.dataEntradaEstoque = xmlDoc.documentElement.getElementsByTagName("dhEmi")[0].textContent;
-        this.entrada.valorCompra = xmlDoc.documentElement.getElementsByTagName("vNF")[0].textContent;
+        this.entrada.chaveNotaFiscal = xmlDoc.documentElement.getElementsByTagName("chNFe")[0].textContent;
+        this.entrada.dataEntradaEstoque = xmlDoc.documentElement.getElementsByTagName("dhEmi")[0].textContent!.substring(0, 19);
+        this.entrada.valorCompra = parseInt(xmlDoc.documentElement.getElementsByTagName("vUnTrib")[0].textContent!);
         // Dados do veículo
         this.motoInline = xmlDoc.documentElement.getElementsByTagName("infAdProd")[0].textContent!;
         const veiculo = xmlDoc.documentElement.getElementsByTagName("veicProd")[0];

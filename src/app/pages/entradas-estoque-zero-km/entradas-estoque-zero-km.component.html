@@ -19,10 +19,6 @@
             <div mat-line>Data de entrada de estoque</div>
             <div mat-line>{{entrada.dataEntradaEstoque | date}}</div>
         </mat-list-item>
-        <mat-list-item>
-            <div mat-line>Valor da venda</div>
-            <div mat-line>{{entrada.valorCompra | currency}}</div>
-        </mat-list-item>
     </mat-list>
     <h2 class="mat-title" style="color: #ff6610">Motos</h2>
     <mat-list>
@@ -43,10 +39,14 @@
             <div mat-line>Data de medição do Hodômetro</div>
             <div mat-line>{{entrada.dataHoraMedicaoHodometro | date}}</div>
         </mat-list-item>
+        <mat-list-item>
+            <div mat-line>Valor da compra</div>
+            <div mat-line>{{entrada.valorCompra | currency}}</div>
+        </mat-list-item>
     </mat-list>
     <mat-card-actions>
         <button type="reset" mat-button (click)="cancelar();">Cancelar</button>
-        <button type="submit" mat-raised-button color="primary" (click)="onSubmit(entrada)">Salvar</button>
+        <button type="submit" mat-raised-button color="primary" (click)="onSubmit(entrada)">Enviar</button>
     </mat-card-actions>
 </mat-card>
 <ng-template #elseIf>

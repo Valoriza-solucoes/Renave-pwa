@@ -57,8 +57,8 @@ export class SaidasEstoqueVeiculoZeroKmComponent implements OnInit {
     const filterValue = value.toLowerCase();
     return this.municipios.filter(municipio => municipio.nome.toLowerCase().includes(filterValue));
   }
-  filtraMunicipio(value: string): Municipio[] {
-    return this.municipios.filter(municipio => municipio.nome == value);
+  filtraMunicipio(value: string, uf: string): Municipio[] {
+    return this.municipios.filter(municipio => municipio.nome == value && municipio.uf == uf);
   }
 
   ngOnInit(): void {
@@ -103,8 +103,8 @@ export class SaidasEstoqueVeiculoZeroKmComponent implements OnInit {
           this.saidasEstoqueVeiculoZeroKm.comprador.endereco.bairro = endereco.getElementsByTagName('xBairro')[0].textContent!;
           const municipio = endereco.getElementsByTagName('xMun')[0].textContent!;
           const uf = endereco.getElementsByTagName('UF')[0].textContent!;
-          console.log(municipio);
-          const idMunicipio = this.filtraMunicipio(municipio);
+          console.log(municipio, uf);
+          const idMunicipio = this.filtraMunicipio(municipio, uf);
           this.saidasEstoqueVeiculoZeroKm.comprador.endereco.codigoMunicipio = parseInt(idMunicipio[0].id);
           this.cidadeUf = municipio + '-' + uf;
           this.saidasEstoqueVeiculoZeroKm.comprador.endereco.cep = endereco.getElementsByTagName('CEP')[0].textContent!;
@@ -149,7 +149,7 @@ export class SaidasEstoqueVeiculoZeroKmComponent implements OnInit {
         'pwd': usuario?.pwd!,
       })
     };
-
+    console.log(this.saidasEstoqueVeiculoZeroKm);
     this.http.post(environment.urlRenave + 'renave/estoque/sair-veiculozerokm', this.saidasEstoqueVeiculoZeroKm, httpOptions).pipe().subscribe(
       (res => { console.log('passou', res); this.isCarregando = false; }),
       (err => {
