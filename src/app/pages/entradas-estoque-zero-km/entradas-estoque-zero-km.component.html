@@ -2,56 +2,53 @@
     <span>Entradas Estoque Veículos Zero km</span>
     <span class="spacer"></span>
     <button mat-raised-button color="primary" (click)="fileInput.click()" [disabled]="isCarregando">
-        <mat-icon>file_upload</mat-icon> Importar XML
+        <mat-icon>file_upload</mat-icon> Importar Nota Fiscal em XML
     </button>
     <input hidden (change)="onFileSelected()" #fileInput type="file" id="file" accept="text/xml">
 </mat-toolbar>
-<mat-card>
-    <form id="entradaForm" [formGroup]="entradaForm" (ngSubmit)="onSubmit(entradaForm.value)">
-        <form>
-            <h2 class="mat-title" style="color: #ff6610">Dados da Moto</h2>
-            <p>
-                <mat-form-field appearance="fill">
-                    <mat-label>Chassi</mat-label>
-                    <input name="chassi" formControlName="chassi" matInput>
-                </mat-form-field>
-            </p>
-            <p>
-                <mat-form-field appearance="fill">
-                    <mat-label>KM hodômetro</mat-label>
-                    <input type="number" name="quilometragemHodometro" formControlName="quilometragemHodometro" matInput>
-                </mat-form-field>
-            </p>
-            <p>
-                <mat-form-field appearance="fill">
-                    <mat-label>Data de medição do Hodômetro</mat-label>
-                    <input type="datetime-local" name="dataHoraMedicaoHodometro" formControlName="dataHoraMedicaoHodometro" matInput>
-                </mat-form-field>
-            </p>
-            <h2 class="mat-title" style="color: #ff6610">Dados da NF-e</h2>
-            <p>
-                <mat-form-field appearance="fill">
-                    <mat-label>Chave da nota fiscal</mat-label>
-                    <input type="text" name="chaveNotaFiscal" formControlName="chaveNotaFiscal" matInput>
-                </mat-form-field>
-            </p>
-            <p>
-                <mat-form-field appearance="fill">
-                    <mat-label>Data de entrada de estoque</mat-label>
-                    <input type="datetime-local" name="dataEntradaEstoque" formControlName="dataEntradaEstoque" placeholder="00/00/0000" matInput>
-                </mat-form-field>
-            </p>
-            <p>
-                <mat-form-field appearance="fill">
-                    <mat-label>Valor da venda</mat-label>
-                    <span matPrefix>R$ &nbsp;</span>
-                    <input type="number" min="0.00" step="0.01" name="valorCompra" formControlName="valorCompra" matInput>
-                </mat-form-field>
-            </p>
-        </form>
-        <mat-card-actions>
-            <button type="reset" mat-button (click)="voltar();">Cancelar</button>
-            <button type="submit" mat-raised-button color="primary">Salvar</button>
-        </mat-card-actions>
-    </form>
+<mat-card *ngIf="entrada.chaveNotaFiscal; else elseIf">
+    <mat-card-title style="color: #112a6a">Dados da nota fiscal</mat-card-title>
+    <mat-card-subtitle>{{fileName}}</mat-card-subtitle>
+    <mat-list>
+        <div mat-subheader>Dados da NF-e</div>
+        <mat-list-item>
+            <div mat-line>Chave da nota fiscal</div>
+            <div mat-line>{{entrada.chaveNotaFiscal}}</div>
+        </mat-list-item>
+        <mat-list-item>
+            <div mat-line>Data de entrada de estoque</div>
+            <div mat-line>{{entrada.dataEntradaEstoque | date}}</div>
+        </mat-list-item>
+        <mat-list-item>
+            <div mat-line>Valor da venda</div>
+            <div mat-line>{{entrada.valorCompra | currency}}</div>
+        </mat-list-item>
+    </mat-list>
+    <h2 class="mat-title" style="color: #ff6610">Motos</h2>
+    <mat-list>
+        <div mat-subheader>Moto #1</div>
+        <mat-list-item>
+            <div mat-line>Dados da Moto</div>
+            <div mat-line><small class="caption">{{motoInline}}</small></div>
+        </mat-list-item>
+        <mat-list-item>
+            <div mat-line>Chassi</div>
+            <div mat-line>{{entrada.chassi}}</div>
+        </mat-list-item>
+        <mat-list-item>
+            <div mat-line>KM hodômetro</div>
+            <div mat-line>{{entrada.quilometragemHodometro}}</div>
+        </mat-list-item>
+        <mat-list-item>
+            <div mat-line>Data de medição do Hodômetro</div>
+            <div mat-line>{{entrada.dataHoraMedicaoHodometro | date}}</div>
+        </mat-list-item>
+    </mat-list>
+    <mat-card-actions>
+        <button type="reset" mat-button (click)="cancelar();">Cancelar</button>
+        <button type="submit" mat-raised-button color="primary" (click)="onSubmit(entrada)">Salvar</button>
+    </mat-card-actions>
 </mat-card>
+<ng-template #elseIf>
+    <div style="padding: 16px">Selecione uma nota fiscal de entrada XML no botão acima</div>
+</ng-template>
