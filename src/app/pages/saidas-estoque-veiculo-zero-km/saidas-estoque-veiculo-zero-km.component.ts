@@ -10,6 +10,7 @@ import { map, startWith } from 'rxjs/operators';
 import { FormControl } from '@angular/forms';
 import { EstoqueService } from 'src/app/services/estoque.service';
 import { municipios } from 'src/assets/municipios';
+import { MatSnackBar } from '@angular/material/snack-bar';
 @Component({
   selector: 'app-saidas-estoque-veiculo-zero-km',
   templateUrl: './saidas-estoque-veiculo-zero-km.component.html',
@@ -47,7 +48,7 @@ export class SaidasEstoqueVeiculoZeroKmComponent implements OnInit {
   municipios: Municipio[] = municipios;
   fileName = '';
 
-  constructor(private http: HttpClient, private auth: AuthService, private estoque: EstoqueService) {
+  constructor(private http: HttpClient, private auth: AuthService, private estoque: EstoqueService, private snackBar: MatSnackBar) {
     this.filteredMunicipio = this.municipioCtrl.valueChanges.pipe(
       startWith(''),
       map(municipio => (municipio ? this._filterMunicipios(municipio) : this.municipios.slice())),
@@ -133,7 +134,13 @@ export class SaidasEstoqueVeiculoZeroKmComponent implements OnInit {
               this.saidasEstoqueVeiculoZeroKm.idEstoque = res[0].id!;
             }
             this.isCarregando = false;
-          }, (err) => { this.isCarregando = false; console.log(err.error.detalhe); });
+          }, (err) => {
+            this.isCarregando = false; console.log(err.error.detalhe);
+            // Simple message with an action.
+            this.snackBar.open(err.error.detalhe, 'Fechar', {
+              duration: 3000
+            });
+          });
         }
       }
       reader.readAsText(file, MIMEType);

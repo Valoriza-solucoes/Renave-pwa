@@ -22,6 +22,7 @@ import {MatRadioModule} from '@angular/material/radio';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import {MatChipsModule} from '@angular/material/chips';
 import {MatBadgeModule} from '@angular/material/badge';
+import {MatSnackBarModule} from '@angular/material/snack-bar';
 import { ReactiveFormsModule } from '@angular/forms';
 
 import {registerLocaleData} from '@angular/common';
@@ -59,6 +60,7 @@ registerLocaleData(localePt, 'pt-BR');
     MatAutocompleteModule,
     MatChipsModule,
     MatBadgeModule,
+    MatSnackBarModule,
     ReactiveFormsModule,
     ServiceWorkerModule.register('ngsw-worker.js', {
       enabled: environment.production,
