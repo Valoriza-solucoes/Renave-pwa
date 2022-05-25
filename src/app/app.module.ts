@@ -20,6 +20,8 @@ import {MatTableModule} from '@angular/material/table';
 import {MatProgressBarModule} from '@angular/material/progress-bar';
 import {MatRadioModule} from '@angular/material/radio';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
+import {MatChipsModule} from '@angular/material/chips';
+import {MatBadgeModule} from '@angular/material/badge';
 import { ReactiveFormsModule } from '@angular/forms';
 
 import {registerLocaleData} from '@angular/common';
@@ -55,6 +57,8 @@ registerLocaleData(localePt, 'pt-BR');
     MatProgressBarModule,
     MatRadioModule,
     MatAutocompleteModule,
+    MatChipsModule,
+    MatBadgeModule,
     ReactiveFormsModule,
     ServiceWorkerModule.register('ngsw-worker.js', {
       enabled: environment.production,

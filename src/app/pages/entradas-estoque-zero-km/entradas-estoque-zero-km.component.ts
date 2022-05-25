@@ -23,6 +23,9 @@ export class EntradasEstoqueZeroKmComponent implements OnInit {
   };
   fileName = '';
   motoInline = '';
+  motos: any = [];
+  contador = 0;
+  total = 0;
 
   constructor(private location: Location, private http: HttpClient, private auth: AuthService) {
   }
@@ -46,8 +49,12 @@ export class EntradasEstoqueZeroKmComponent implements OnInit {
     file.value = '';
   }
 
-  onSubmit(entrada: any): void {
+  onSubmit(entrada: any, motos: any): void {
     console.log('entrada', entrada);
+    console.log('motos', motos);
+    this.total = motos.length;
+    this.isCarregando = true;
+
     const usuario: Usuario = this.auth.getUsuario();
     const httpOptions = {
       headers: new HttpHeaders({
@@ -56,23 +63,38 @@ export class EntradasEstoqueZeroKmComponent implements OnInit {
       })
     };
     const setEntrada = {
-      "chassi": entrada.chassi,
+      "chassi": motos[this.contador].chassi,
       "chaveNotaFiscal": entrada.chaveNotaFiscal,
       "cpfOperadorResponsavel": environment.cpfOperadorResponsavel,
       "dataEntradaEstoque": entrada.dataEntradaEstoque,
       "dataHoraMedicaoHodometro": entrada.dataHoraMedicaoHodometro,
       "quilometragemHodometro": entrada.quilometragemHodometro,
-      "valorCompra": entrada.valorCompra
+      "valorCompra": motos[this.contador].valorVeiculo
     }
     console.log(setEntrada);
     // /api/entradas-estoque-zero-km
     this.http.post(environment.urlRenave + 'renave/estoque/entrar-veiculozerokm', setEntrada, httpOptions).pipe().subscribe(res => {
-      console.log('Passou com sucesso!');
       console.log(res);
-      this.cancelar();
+      this.motos[this.contador].status = true;
+      this.contador++;
+      if (this.contador < this.total) {
+        this.onSubmit(entrada, motos);
+      } else {
+        this.isCarregando = false;
+        this.contador = 0;
+        this.cancelar();
+      }
     }, (err) => {
       console.log(err);
-      alert('Ocorreu algum problema com sua requisição! Verifique os campos preenchidos e tente novamente.');
+      this.motos[this.contador].status = false;
+      this.contador++;
+      // alert('Ocorreu algum problema com a moto ' + this.contador + '! Verifique os campos preenchidos e tente novamente.');
+      if (this.contador < this.total) {
+        this.onSubmit(entrada, motos);
+      } else {
+        this.isCarregando = false;
+        this.contador = 0;
+      }
     });
   }
 
@@ -91,10 +113,18 @@ export class EntradasEstoqueZeroKmComponent implements OnInit {
         this.entrada.chaveNotaFiscal = xmlDoc.documentElement.getElementsByTagName("chNFe")[0].textContent;
         this.entrada.dataEntradaEstoque = xmlDoc.documentElement.getElementsByTagName("dhEmi")[0].textContent!.substring(0, 19);
         this.entrada.valorCompra = parseInt(xmlDoc.documentElement.getElementsByTagName("vUnTrib")[0].textContent!);
-        // Dados do veículo
-        this.motoInline = xmlDoc.documentElement.getElementsByTagName("infAdProd")[0].textContent!;
-        const veiculo = xmlDoc.documentElement.getElementsByTagName("veicProd")[0];
-        this.entrada.chassi = veiculo.getElementsByTagName("chassi")[0].textContent;
+        // Dados do veículos
+        const veiculos = xmlDoc.documentElement.getElementsByTagName("det");
+        this.total = veiculos.length;
+        for (let index = 0; index < veiculos.length; index++) {
+          const moto = veiculos[index];
+          let motoInsert = { motoInline: '', chassi: '', valorVeiculo: 0, status: null };
+          motoInsert.motoInline = moto.getElementsByTagName("infAdProd")[0].textContent!;
+          const prod = moto.getElementsByTagName("prod")[0];
+          motoInsert.chassi = prod.getElementsByTagName("chassi")[0].textContent!;
+          motoInsert.valorVeiculo = parseInt(prod.getElementsByTagName("vUnTrib")[0].textContent!);
+          this.motos.push(motoInsert);
+        }
         this.entrada.quilometragemHodometro = 0;
         this.entrada.dataHoraMedicaoHodometro = this.entrada.dataEntradaEstoque;
       }
