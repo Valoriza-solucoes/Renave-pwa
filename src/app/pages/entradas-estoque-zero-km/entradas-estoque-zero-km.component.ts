@@ -22,7 +22,6 @@ export class EntradasEstoqueZeroKmComponent implements OnInit {
     valorCompra: '',
   };
   fileName = '';
-  motoInline = '';
   motos: any = [];
   contador = 0;
   total = 0;
@@ -35,7 +34,7 @@ export class EntradasEstoqueZeroKmComponent implements OnInit {
 
   cancelar(): void {
     this.fileName = '';
-    this.motoInline = '';
+    this.motos = '';
     this.entrada = {
       chassi: '',
       chaveNotaFiscal: '',
@@ -50,9 +49,6 @@ export class EntradasEstoqueZeroKmComponent implements OnInit {
   }
 
   onSubmit(entrada: any, motos: any): void {
-    console.log('entrada', entrada);
-    console.log('motos', motos);
-    this.total = motos.length;
     this.isCarregando = true;
 
     const usuario: Usuario = this.auth.getUsuario();
@@ -114,6 +110,7 @@ export class EntradasEstoqueZeroKmComponent implements OnInit {
         this.entrada.dataEntradaEstoque = xmlDoc.documentElement.getElementsByTagName("dhEmi")[0].textContent!.substring(0, 19);
         this.entrada.valorCompra = parseInt(xmlDoc.documentElement.getElementsByTagName("vUnTrib")[0].textContent!);
         // Dados do veículos
+          this.motos = [];
         const veiculos = xmlDoc.documentElement.getElementsByTagName("det");
         this.total = veiculos.length;
         for (let index = 0; index < veiculos.length; index++) {

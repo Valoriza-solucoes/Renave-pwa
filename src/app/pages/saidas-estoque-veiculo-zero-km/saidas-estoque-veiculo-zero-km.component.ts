@@ -41,14 +41,16 @@ export class SaidasEstoqueVeiculoZeroKmComponent implements OnInit {
     valorVenda: null
   };
 
-  motoInline = '';
   cidadeUf = '';
   municipioCtrl = new FormControl();
   filteredMunicipio: Observable<Municipio[]> | undefined;
   municipios: Municipio[] = municipios;
   fileName = '';
+  motos: any = [];
+  contador = 0;
+  total = 0;
 
-  constructor(private http: HttpClient, private auth: AuthService, private estoque: EstoqueService, private snackBar: MatSnackBar) {
+  constructor(private http: HttpClient, private auth: AuthService, private estoque: EstoqueService, private snackbar: MatSnackBar) {
     this.filteredMunicipio = this.municipioCtrl.valueChanges.pipe(
       startWith(''),
       map(municipio => (municipio ? this._filterMunicipios(municipio) : this.municipios.slice())),
@@ -80,9 +82,6 @@ export class SaidasEstoqueVeiculoZeroKmComponent implements OnInit {
         var text = reader.result;
         if (typeof (text) === 'string') {
           const xmlDoc = new DOMParser().parseFromString(text, 'text/xml');
-
-          const motoInline = xmlDoc.documentElement.getElementsByTagName("infAdProd")[0].textContent;
-          this.motoInline = motoInline!;
           console.log(xmlDoc.documentElement);
 
           const dados = xmlDoc.documentElement.firstChild!.firstChild!;
@@ -117,30 +116,39 @@ export class SaidasEstoqueVeiculoZeroKmComponent implements OnInit {
           this.saidasEstoqueVeiculoZeroKm.emailEstabelecimento = xmlDoc.getElementsByTagName('infRespTec').length ? xmlDoc.getElementsByTagName('infRespTec')[0].getElementsByTagName('email')[0].textContent! : '';
           console.log('saidasEstoqueVeiculoZeroKm 2', this.saidasEstoqueVeiculoZeroKm);
 
-          // CHASSI
-          this.saidasEstoqueVeiculoZeroKm.idEstoque = null;
-          // Verifica se o produto no XML contém Veículo
-          const veicProd = xmlDoc.documentElement.getElementsByTagName('prod')[0].getElementsByTagName('veicProd');
-          let chassi;
-          this.isCarregando = true;
-          if (veicProd.length == 0) {
-            chassi = xmlDoc.documentElement.getElementsByTagName('prod')[0].getElementsByTagName('cProd')[0].textContent!;
-          } else { // Se tiver veicProd
-            chassi = veicProd[0].getElementsByTagName('chassi')[0].textContent!;
-          }
-          this.estoque.resEstoqueChassi(chassi).subscribe((res) => {
-            console.log(res);
-            if (Array.isArray(res) && res.length > 0) {
-              this.saidasEstoqueVeiculoZeroKm.idEstoque = res[0].id!;
+          //MOTOS
+          this.motos = [];
+          const veiculos = xmlDoc.documentElement.getElementsByTagName("det");
+          this.total = veiculos.length;
+          for (let index = 0; index < veiculos.length; index++) {
+            const moto = veiculos[index];
+            let motoInsert = { motoInline: '', idEstoque: '', status: null };
+            const motoInline = xmlDoc.documentElement.getElementsByTagName("infAdProd")[0].textContent!;
+            motoInsert.motoInline = motoInline;
+            // CHASSI
+            this.saidasEstoqueVeiculoZeroKm.idEstoque = null;
+            // Verifica se o produto no XML contém Veículo
+            const veicProd = moto.getElementsByTagName('prod')[0].getElementsByTagName('veicProd');
+            let chassi;
+            this.isCarregando = true;
+            if (veicProd.length == 0) {
+              chassi = moto.getElementsByTagName('prod')[0].getElementsByTagName('cProd')[0].textContent!;
+            } else { // Se tiver veicProd
+              chassi = veicProd[0].getElementsByTagName('chassi')[0].textContent!;
             }
-            this.isCarregando = false;
-          }, (err) => {
-            this.isCarregando = false; console.log(err.error.detalhe);
-            // Simple message with an action.
-            this.snackBar.open(err.error.detalhe, 'Fechar', {
-              duration: 3000
+            this.estoque.resEstoqueChassi(chassi).subscribe((res) => {
+              console.log(res);
+              if (Array.isArray(res) && res.length > 0) {
+                this.saidasEstoqueVeiculoZeroKm.idEstoque = res[0].id!;
+                motoInsert.idEstoque = res[0].id!;
+                this.motos.push(motoInsert);
+              }
+              this.isCarregando = false;
+            }, (err) => {
+              this.isCarregando = false; console.log(err.error.detalhe);
+              this.motos.push(motoInsert);
             });
-          });
+          }
         }
       }
       reader.readAsText(file, MIMEType);
@@ -149,6 +157,7 @@ export class SaidasEstoqueVeiculoZeroKmComponent implements OnInit {
 
   salvar(): void {
     this.isCarregando = true;
+
     const usuario: Usuario = this.auth.getUsuario();
     const httpOptions = {
       headers: new HttpHeaders({
@@ -156,23 +165,51 @@ export class SaidasEstoqueVeiculoZeroKmComponent implements OnInit {
         'pwd': usuario?.pwd!,
       })
     };
+    this.saidasEstoqueVeiculoZeroKm.idEstoque = this.motos[this.contador].idEstoque!;
     console.log(this.saidasEstoqueVeiculoZeroKm);
     this.http.post(environment.urlRenave + 'renave/estoque/sair-veiculozerokm', this.saidasEstoqueVeiculoZeroKm, httpOptions).pipe().subscribe(
-      (res => { console.log('passou', res); this.isCarregando = false; }),
+      (res => {
+        console.log('passou', res);
+        this.motos[this.contador].status = true;
+        this.contador++;
+        if (this.contador < this.total) {
+          this.salvar();
+        } else {
+          this.isCarregando = false;
+          this.contador = 0;
+          this.cancelar();
+        }
+      }),
       (err => {
         console.log(err);
+        this.motos[this.contador].status = false;
+        this.contador++;
+        let msg = '';
         if (err.error) {
-          alert(err.error.mensagemParaUsuarioFinal);
+          if (err.error.mensagemParaUsuarioFinal) {
+            msg = err.error.mensagemParaUsuarioFinal;
+          } else {
+            msg = err.error.detalhe;
+          }
         } else if (err.message) {
-          alert(err.message);
+          msg = err.message;
+        } else {
+          msg = 'Ocorreu um erro desconhecido';
         }
-        this.isCarregando = false;
+        this.snackbar.open(msg, 'Fechar', {
+          duration: 3000
+        });
+        if (this.contador < this.total) {
+          this.salvar();
+        } else {
+          this.isCarregando = false;
+        }
       })
     );
   }
 
   cancelar() {
-    this.motoInline = '';
+    this.motos = [];
     this.saidasEstoqueVeiculoZeroKm = {
       chaveNotaFiscal: '',
       comprador: {

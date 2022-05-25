@@ -90,23 +90,25 @@
     </div>
     <div>
         <h2 class="mat-title" style="color: #ff6610;margin-bottom: 0">Motos</h2>
-        <mat-list>
-            <div mat-subheader>Moto #1</div>
+        <mat-list *ngFor="let moto of motos; index as i">
+            <div mat-subheader>Moto #{{i+1}}</div>
             <mat-list-item>
                 <div mat-line>Dados da Moto</div>
-                <div mat-line><small class="caption">{{motoInline}}</small></div>
+                <div mat-line><small class="caption">{{moto.motoInline}}</small></div>
             </mat-list-item>
             <mat-list-item>
                 <div mat-line>Código do Estoque</div>
-                <div mat-line>{{saidasEstoqueVeiculoZeroKm.idEstoque ? saidasEstoqueVeiculoZeroKm.idEstoque :
+                <div mat-line>{{moto.idEstoque ? moto.idEstoque :
                     'Estoque não encontrado' }}</div>
             </mat-list-item>
         </mat-list>
     </div>
     <mat-card-actions>
         <button type="reset" mat-button (click)="cancelar()">Cancelar</button>
-        <button mat-raised-button color="primary" (click)="salvar()" [disabled]="isCarregando">{{isCarregando ?
-            'Carregando...' : 'Enviar'}}</button>
+        <button mat-raised-button color="primary" (click)="salvar()" [disabled]="isCarregando" [matBadge]="total"
+            matBadgeColor="accent" [matBadgeHidden]="isCarregando">
+            {{!isCarregando ? 'Enviar' : 'Enviando ' + contador + '/' + total}}
+        </button>
     </mat-card-actions>
 </mat-card>
 <ng-template #elseIf>
