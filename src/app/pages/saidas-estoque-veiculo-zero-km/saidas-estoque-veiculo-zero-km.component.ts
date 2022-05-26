@@ -84,69 +84,81 @@ export class SaidasEstoqueVeiculoZeroKmComponent implements OnInit {
           const xmlDoc = new DOMParser().parseFromString(text, 'text/xml');
           console.log(xmlDoc.documentElement);
 
-          const dados = xmlDoc.documentElement.firstChild!.firstChild!;
-
-          // Dados do comprador
-          const compradorDoc = xmlDoc.documentElement.getElementsByTagName('dest')[0];
-          this.saidasEstoqueVeiculoZeroKm.comprador.nome = compradorDoc.getElementsByTagName('xNome')[0].textContent!;
-          this.saidasEstoqueVeiculoZeroKm.comprador.email = compradorDoc.getElementsByTagName('email').length ? compradorDoc.getElementsByTagName('email')[0].textContent! : '';
-          if (compradorDoc.getElementsByTagName('CNPJ').length > 0) {
-            this.saidasEstoqueVeiculoZeroKm.comprador.numeroDocumento = compradorDoc.getElementsByTagName('CNPJ')[0].textContent!;
-            this.saidasEstoqueVeiculoZeroKm.comprador.tipoDocumento = 'CNPJ';
-          } else if (compradorDoc.getElementsByTagName('CPF').length > 0) {
-            this.saidasEstoqueVeiculoZeroKm.comprador.tipoDocumento = 'CPF';
-            this.saidasEstoqueVeiculoZeroKm.comprador.numeroDocumento = compradorDoc.getElementsByTagName('CPF')[0].textContent!;
-          }
-          const endereco = compradorDoc.getElementsByTagName('enderDest')[0];
-          this.saidasEstoqueVeiculoZeroKm.comprador.endereco.logradouro = endereco.getElementsByTagName('xLgr')[0].textContent!;
-          this.saidasEstoqueVeiculoZeroKm.comprador.endereco.numero = endereco.getElementsByTagName('nro')[0].textContent!;
-          this.saidasEstoqueVeiculoZeroKm.comprador.endereco.bairro = endereco.getElementsByTagName('xBairro')[0].textContent!;
-          const municipio = endereco.getElementsByTagName('xMun')[0].textContent!;
-          const uf = endereco.getElementsByTagName('UF')[0].textContent!;
-          console.log(municipio, uf);
-          const idMunicipio = this.filtraMunicipio(municipio, uf);
-          this.saidasEstoqueVeiculoZeroKm.comprador.endereco.codigoMunicipio = parseInt(idMunicipio[0].id);
-          this.cidadeUf = municipio + '-' + uf;
-          this.saidasEstoqueVeiculoZeroKm.comprador.endereco.cep = endereco.getElementsByTagName('CEP')[0].textContent!;
-
-          // Dados da NF-e
-          this.saidasEstoqueVeiculoZeroKm.chaveNotaFiscal = xmlDoc.getElementsByTagName('chNFe')[0].textContent!;
-          this.saidasEstoqueVeiculoZeroKm.dataVenda = xmlDoc.getElementsByTagName('dhRecbto')[0].textContent!.substring(0, 19);
-          this.saidasEstoqueVeiculoZeroKm.valorVenda = parseInt(xmlDoc.getElementsByTagName('vNF')[0].textContent!);
-          this.saidasEstoqueVeiculoZeroKm.emailEstabelecimento = xmlDoc.getElementsByTagName('infRespTec').length ? xmlDoc.getElementsByTagName('infRespTec')[0].getElementsByTagName('email')[0].textContent! : '';
-          console.log('saidasEstoqueVeiculoZeroKm 2', this.saidasEstoqueVeiculoZeroKm);
-
-          //MOTOS
-          this.motos = [];
-          const veiculos = xmlDoc.documentElement.getElementsByTagName("det");
-          this.total = veiculos.length;
-          for (let index = 0; index < veiculos.length; index++) {
-            const moto = veiculos[index];
-            let motoInsert = { motoInline: '', idEstoque: '', status: null };
-            const motoInline = xmlDoc.documentElement.getElementsByTagName("infAdProd")[0].textContent!;
-            motoInsert.motoInline = motoInline;
-            // CHASSI
-            this.saidasEstoqueVeiculoZeroKm.idEstoque = null;
-            // Verifica se o produto no XML contém Veículo
-            const veicProd = moto.getElementsByTagName('prod')[0].getElementsByTagName('veicProd');
-            let chassi;
-            this.isCarregando = true;
-            if (veicProd.length == 0) {
-              chassi = moto.getElementsByTagName('prod')[0].getElementsByTagName('cProd')[0].textContent!;
-            } else { // Se tiver veicProd
-              chassi = veicProd[0].getElementsByTagName('chassi')[0].textContent!;
+          /* 
+            Verificar se nota é de entrada
+            Nota de entrada deve ter mesmo CNPJ emitente do usuário
+          */
+          const usuario: Usuario = this.auth.getUsuario();
+          const CPNJ_XML = xmlDoc.documentElement.getElementsByTagName("emit")[0].getElementsByTagName("CNPJ");
+          const CNPJ_EMIT = CPNJ_XML.length ? xmlDoc.documentElement.getElementsByTagName("emit")[0].getElementsByTagName("CNPJ")[0].textContent : '';
+          console.log(CNPJ_EMIT);
+          if (CNPJ_EMIT === usuario?.cnpj!) {
+            // Dados do comprador
+            const compradorDoc = xmlDoc.documentElement.getElementsByTagName('dest')[0];
+            this.saidasEstoqueVeiculoZeroKm.comprador.nome = compradorDoc.getElementsByTagName('xNome')[0].textContent!;
+            this.saidasEstoqueVeiculoZeroKm.comprador.email = compradorDoc.getElementsByTagName('email').length ? compradorDoc.getElementsByTagName('email')[0].textContent! : '';
+            if (compradorDoc.getElementsByTagName('CNPJ').length > 0) {
+              this.saidasEstoqueVeiculoZeroKm.comprador.numeroDocumento = compradorDoc.getElementsByTagName('CNPJ')[0].textContent!;
+              this.saidasEstoqueVeiculoZeroKm.comprador.tipoDocumento = 'CNPJ';
+            } else if (compradorDoc.getElementsByTagName('CPF').length > 0) {
+              this.saidasEstoqueVeiculoZeroKm.comprador.tipoDocumento = 'CPF';
+              this.saidasEstoqueVeiculoZeroKm.comprador.numeroDocumento = compradorDoc.getElementsByTagName('CPF')[0].textContent!;
             }
-            this.estoque.resEstoqueChassi(chassi).subscribe((res) => {
-              console.log(res);
-              if (Array.isArray(res) && res.length > 0) {
-                this.saidasEstoqueVeiculoZeroKm.idEstoque = res[0].id!;
-                motoInsert.idEstoque = res[0].id!;
-                this.motos.push(motoInsert);
+            const endereco = compradorDoc.getElementsByTagName('enderDest')[0];
+            this.saidasEstoqueVeiculoZeroKm.comprador.endereco.logradouro = endereco.getElementsByTagName('xLgr')[0].textContent!;
+            this.saidasEstoqueVeiculoZeroKm.comprador.endereco.numero = endereco.getElementsByTagName('nro')[0].textContent!;
+            this.saidasEstoqueVeiculoZeroKm.comprador.endereco.bairro = endereco.getElementsByTagName('xBairro')[0].textContent!;
+            const municipio = endereco.getElementsByTagName('xMun')[0].textContent!;
+            const uf = endereco.getElementsByTagName('UF')[0].textContent!;
+            console.log(municipio, uf);
+            const idMunicipio = this.filtraMunicipio(municipio, uf);
+            this.saidasEstoqueVeiculoZeroKm.comprador.endereco.codigoMunicipio = parseInt(idMunicipio[0].id);
+            this.cidadeUf = municipio + '-' + uf;
+            this.saidasEstoqueVeiculoZeroKm.comprador.endereco.cep = endereco.getElementsByTagName('CEP')[0].textContent!;
+
+            // Dados da NF-e
+            this.saidasEstoqueVeiculoZeroKm.chaveNotaFiscal = xmlDoc.getElementsByTagName('chNFe')[0].textContent!;
+            this.saidasEstoqueVeiculoZeroKm.dataVenda = xmlDoc.getElementsByTagName('dhRecbto')[0].textContent!.substring(0, 19);
+            this.saidasEstoqueVeiculoZeroKm.valorVenda = parseInt(xmlDoc.getElementsByTagName('vNF')[0].textContent!);
+            this.saidasEstoqueVeiculoZeroKm.emailEstabelecimento = xmlDoc.getElementsByTagName('infRespTec').length ? xmlDoc.getElementsByTagName('infRespTec')[0].getElementsByTagName('email')[0].textContent! : '';
+            console.log('saidasEstoqueVeiculoZeroKm 2', this.saidasEstoqueVeiculoZeroKm);
+
+            //MOTOS
+            this.motos = [];
+            const veiculos = xmlDoc.documentElement.getElementsByTagName("det");
+            this.total = veiculos.length;
+            for (let index = 0; index < veiculos.length; index++) {
+              const moto = veiculos[index];
+              let motoInsert = { motoInline: '', idEstoque: '', status: null };
+              const motoInline = xmlDoc.documentElement.getElementsByTagName("infAdProd")[0].textContent!;
+              motoInsert.motoInline = motoInline;
+              // CHASSI
+              this.saidasEstoqueVeiculoZeroKm.idEstoque = null;
+              // Verifica se o produto no XML contém Veículo
+              const veicProd = moto.getElementsByTagName('prod')[0].getElementsByTagName('veicProd');
+              let chassi;
+              this.isCarregando = true;
+              if (veicProd.length == 0) {
+                chassi = moto.getElementsByTagName('prod')[0].getElementsByTagName('cProd')[0].textContent!;
+              } else { // Se tiver veicProd
+                chassi = veicProd[0].getElementsByTagName('chassi')[0].textContent!;
               }
-              this.isCarregando = false;
-            }, (err) => {
-              this.isCarregando = false; console.log(err.error.detalhe);
-              this.motos.push(motoInsert);
+              this.estoque.resEstoqueChassi(chassi).subscribe((res) => {
+                console.log(res);
+                if (Array.isArray(res) && res.length > 0) {
+                  this.saidasEstoqueVeiculoZeroKm.idEstoque = res[0].id!;
+                  motoInsert.idEstoque = res[0].id!;
+                  this.motos.push(motoInsert);
+                }
+                this.isCarregando = false;
+              }, (err) => {
+                this.isCarregando = false; console.log(err.error.detalhe);
+                this.motos.push(motoInsert);
+              });
+            }
+          } else {
+            this.snackbar.open('Seu CNPJ não percente ao CNPJ emitente', 'Fechar', {
+              duration: 3000
             });
           }
         }
