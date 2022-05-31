@@ -11,12 +11,13 @@ import { FormControl } from '@angular/forms';
 import { EstoqueService } from 'src/app/services/estoque.service';
 import { municipios } from 'src/assets/municipios';
 import { MatSnackBar } from '@angular/material/snack-bar';
+
 @Component({
-  selector: 'app-saidas-estoque-veiculo-zero-km',
-  templateUrl: './saidas-estoque-veiculo-zero-km.component.html',
-  styleUrls: ['./saidas-estoque-veiculo-zero-km.component.scss']
+  selector: 'app-transferencia-estoque-zero-km',
+  templateUrl: './transferencia-estoque-zero-km.component.html',
+  styleUrls: ['./transferencia-estoque-zero-km.component.scss']
 })
-export class SaidasEstoqueVeiculoZeroKmComponent implements OnInit {
+export class TransferenciaEstoqueZeroKmComponent implements OnInit {
   isCarregando = false;
   saidasEstoqueVeiculoZeroKm: SaidasEstoqueVeiculoZeroKm = {
     chaveNotaFiscal: '',
@@ -129,32 +130,18 @@ export class SaidasEstoqueVeiculoZeroKmComponent implements OnInit {
             this.total = veiculos.length;
             for (let index = 0; index < veiculos.length; index++) {
               const moto = veiculos[index];
-              let motoInsert = { motoInline: '', idEstoque: '', status: null };
+              let motoInsert = { motoInline: '', idEstoque: 0, status: null };
               const motoInline = xmlDoc.documentElement.getElementsByTagName("infAdProd")[0].textContent!;
               motoInsert.motoInline = motoInline;
               // CHASSI
               this.saidasEstoqueVeiculoZeroKm.idEstoque = null;
               // Verifica se o produto no XML contém Veículo
               const veicProd = moto.getElementsByTagName('prod')[0].getElementsByTagName('veicProd');
-              let chassi;
-              this.isCarregando = true;
-              if (veicProd.length == 0) {
-                chassi = moto.getElementsByTagName('prod')[0].getElementsByTagName('cProd')[0].textContent!;
-              } else { // Se tiver veicProd
-                chassi = veicProd[0].getElementsByTagName('chassi')[0].textContent!;
-              }
-              this.estoque.resEstoqueChassi(chassi).subscribe((res) => {
-                console.log(res);
-                if (Array.isArray(res) && res.length > 0) {
-                  this.saidasEstoqueVeiculoZeroKm.idEstoque = res[0].id!;
-                  motoInsert.idEstoque = res[0].id!;
-                  this.motos.push(motoInsert);
-                }
-                this.isCarregando = false;
-              }, (err) => {
-                this.isCarregando = false; console.log(err.error.detalhe);
-                this.motos.push(motoInsert);
-              });
+              let cProd = moto.getElementsByTagName('prod')[0].getElementsByTagName('cProd')[0].textContent!;
+              this.saidasEstoqueVeiculoZeroKm.idEstoque = parseInt(cProd);
+              motoInsert.idEstoque = parseInt(cProd);
+              this.motos.push(motoInsert);
+              this.isCarregando = false;
             }
           } else {
             this.snackbar.open('Seu CNPJ não pertence ao CNPJ emitente', 'Fechar', {

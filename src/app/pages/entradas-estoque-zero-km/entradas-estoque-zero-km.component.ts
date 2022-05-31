@@ -134,7 +134,7 @@ export class EntradasEstoqueZeroKmComponent implements OnInit {
           this.entrada.quilometragemHodometro = 0;
           this.entrada.dataHoraMedicaoHodometro = this.entrada.dataEntradaEstoque;
         } else {
-          this.snackbar.open('Seu CNPJ não percente ao CNPJ destinatário', 'Fechar', {
+          this.snackbar.open('Seu CNPJ não pertence ao CNPJ destinatário', 'Fechar', {
             duration: 3000
           });
         }

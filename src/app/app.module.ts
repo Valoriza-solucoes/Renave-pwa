@@ -31,6 +31,7 @@ import { SaidasEstoqueVeiculoZeroKmComponent } from './pages/saidas-estoque-veic
 import { ClienteAutenticadoComponent } from './pages/cliente-autenticado/cliente-autenticado.component';
 import { EntradasEstoqueZeroKmComponent } from './pages/entradas-estoque-zero-km/entradas-estoque-zero-km.component';
 import { EstoqueComponent } from './pages/estoque/estoque.component';
+import { TransferenciaEstoqueZeroKmComponent } from './pages/transferencia-estoque-zero-km/transferencia-estoque-zero-km.component';
 
 registerLocaleData(localePt, 'pt-BR');
 @NgModule({
@@ -39,7 +40,8 @@ registerLocaleData(localePt, 'pt-BR');
     SaidasEstoqueVeiculoZeroKmComponent,
     ClienteAutenticadoComponent,
     EntradasEstoqueZeroKmComponent,
-    EstoqueComponent
+    EstoqueComponent,
+    TransferenciaEstoqueZeroKmComponent
   ],
   imports: [
     BrowserModule,
