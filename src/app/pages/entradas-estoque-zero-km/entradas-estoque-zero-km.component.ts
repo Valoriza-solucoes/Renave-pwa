@@ -14,13 +14,29 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 export class EntradasEstoqueZeroKmComponent implements OnInit {
   isCarregando = false;
   entrada: any = {
-    chassi: '',
     chaveNotaFiscal: '',
     cpfOperadorResponsavel: '',
     dataEntradaEstoque: '',
     dataHoraMedicaoHodometro: '',
     quilometragemHodometro: null,
     valorCompra: '',
+    origem: {
+      cnpj: '',
+      nome: '',
+      email: '',
+      endereco: {
+        logradouro: '',
+        numero: '',
+        cep: '',
+        complemento: '',
+        bairro: '',
+        municipio: {
+          id: '',
+          nome: '',
+          uf: ''
+        }
+      }
+    }
   };
   fileName = '';
   motos: any = [];
@@ -44,6 +60,23 @@ export class EntradasEstoqueZeroKmComponent implements OnInit {
       dataHoraMedicaoHodometro: '',
       quilometragemHodometro: null,
       valorCompra: '',
+      origem: {
+        cnpj: '',
+        nome: '',
+        email: '',
+        endereco: {
+          logradouro: '',
+          numero: '',
+          cep: '',
+          complemento: '',
+          bairro: '',
+          municipio: {
+            id: '',
+            nome: '',
+            uf: ''
+          }
+        }
+      }
     };
     let file: any = document.getElementById('file');
     file.value = '';
@@ -60,13 +93,22 @@ export class EntradasEstoqueZeroKmComponent implements OnInit {
       })
     };
     const setEntrada = {
-      "chassi": motos[this.contador].chassi,
       "chaveNotaFiscal": entrada.chaveNotaFiscal,
       "cpfOperadorResponsavel": environment.cpfOperadorResponsavel,
       "dataEntradaEstoque": entrada.dataEntradaEstoque,
       "dataHoraMedicaoHodometro": entrada.dataHoraMedicaoHodometro,
       "quilometragemHodometro": entrada.quilometragemHodometro,
-      "valorCompra": motos[this.contador].valorVeiculo
+      "valorCompra": motos[this.contador].valorVeiculo,
+      "veiculo": {
+        chassi: motos[this.contador].chassi,
+        descricao: motos[this.contador].descricao,
+        cor: motos[this.contador].cor,
+        cilindrada: motos[this.contador].cilindrada,
+        anoModelo: motos[this.contador].anoModelo,
+        anoFabricacao: motos[this.contador].anoFabricacao,
+        numeroMotor: motos[this.contador].numeroMotor
+      },
+      "origem": entrada.origem
     }
     console.log(setEntrada);
     // /api/entradas-estoque-zero-km
@@ -85,7 +127,6 @@ export class EntradasEstoqueZeroKmComponent implements OnInit {
       console.log(err);
       this.motos[this.contador].status = false;
       this.contador++;
-      // alert('Ocorreu algum problema com a moto ' + this.contador + '! Verifique os campos preenchidos e tente novamente.');
       if (this.contador < this.total) {
         this.onSubmit(entrada, motos);
       } else {
@@ -118,16 +159,37 @@ export class EntradasEstoqueZeroKmComponent implements OnInit {
           this.entrada.chaveNotaFiscal = xmlDoc.documentElement.getElementsByTagName("chNFe")[0].textContent;
           this.entrada.dataEntradaEstoque = xmlDoc.documentElement.getElementsByTagName("dhEmi")[0].textContent!.substring(0, 19);
           this.entrada.valorCompra = parseInt(xmlDoc.documentElement.getElementsByTagName("vUnTrib")[0].textContent!);
+          // Origem
+          const emit = xmlDoc.documentElement.getElementsByTagName("emit")[0];
+          this.entrada.origem.cnpj = emit.getElementsByTagName("CNPJ")[0].textContent!;
+          this.entrada.origem.nome = emit.getElementsByTagName("xNome")[0].textContent!;
+          this.entrada.origem.email = '';
+          // this.entrada.origem.email = emit.getElementsByTagName("xEmail")[0].textContent;
+          const enderecoEmit = emit.getElementsByTagName("enderEmit")[0];
+          this.entrada.origem.endereco.logradouro = enderecoEmit.getElementsByTagName("xLgr")[0].textContent!;
+          this.entrada.origem.endereco.numero = enderecoEmit.getElementsByTagName("nro")[0].textContent!;
+          this.entrada.origem.endereco.cep = enderecoEmit.getElementsByTagName("CEP")[0].textContent!;
+          this.entrada.origem.endereco.complemento = '';
+          this.entrada.origem.endereco.bairro = enderecoEmit.getElementsByTagName("xBairro")[0].textContent!;
+          this.entrada.origem.endereco.municipio.id = enderecoEmit.getElementsByTagName("cMun")[0].textContent!;
+          this.entrada.origem.endereco.municipio.nome = enderecoEmit.getElementsByTagName("xMun")[0].textContent!;
+          this.entrada.origem.endereco.municipio.uf = enderecoEmit.getElementsByTagName("UF")[0].textContent!;
           // Dados do veículos
           this.motos = [];
           const veiculos = xmlDoc.documentElement.getElementsByTagName("det");
           this.total = veiculos.length;
           for (let index = 0; index < veiculos.length; index++) {
             const moto = veiculos[index];
-            let motoInsert = { motoInline: '', chassi: '', valorVeiculo: 0, status: null };
+            let motoInsert = { motoInline: '', chassi: '', descricao: '', cor: '', cilindrada: '', anoModelo: '', anoFabricacao: '', numeroMotor: '', valorVeiculo: 0, status: null };
             motoInsert.motoInline = moto.getElementsByTagName("infAdProd")[0].textContent!;
             const prod = moto.getElementsByTagName("prod")[0];
             motoInsert.chassi = prod.getElementsByTagName("chassi")[0].textContent!;
+            motoInsert.descricao = '';
+            motoInsert.cor = prod.getElementsByTagName("xCor")[0].textContent!;
+            motoInsert.cilindrada = prod.getElementsByTagName("cilin")[0].textContent!;
+            motoInsert.anoModelo = prod.getElementsByTagName("anoMod")[0].textContent!;
+            motoInsert.anoFabricacao = prod.getElementsByTagName("anoFab")[0].textContent!;
+            motoInsert.numeroMotor = prod.getElementsByTagName("nMotor")[0].textContent!;
             motoInsert.valorVeiculo = parseInt(prod.getElementsByTagName("vUnTrib")[0].textContent!);
             this.motos.push(motoInsert);
           }

@@ -23,12 +23,28 @@
             <div mat-line>Valor da compra</div>
             <div mat-line>{{entrada.valorCompra | currency}}</div>
         </mat-list-item> -->
+        <div mat-subheader>Origem</div>
+        <mat-list-item>
+            <div mat-line>CNPJ</div>
+            <div mat-line>{{entrada.origem.cnpj}}</div>
+        </mat-list-item>
+        <mat-list-item>
+            <div mat-line>Nome</div>
+            <div mat-line>{{entrada.origem.nome}}</div>
+        </mat-list-item>
+        <mat-list-item>
+            <div mat-line>Endereço</div>
+            <div mat-line>{{entrada.origem.endereco.logradouro + ', ' + entrada.origem.endereco.numero + ' - ' +
+                entrada.origem.endereco.bairro + ', ' + entrada.origem.endereco.municipio.nome + '-' +
+                entrada.origem.endereco.municipio.uf}}<br>{{entrada.origem.endereco.cep.substring(0, 5) + '-' + entrada.origem.endereco.cep.substring(5)}}</div>
+        </mat-list-item>
     </mat-list>
     <h2 class="mat-title" style="color: #ff6610">Motos</h2>
     <mat-list *ngFor="let moto of motos; index as i">
         <div mat-subheader>
             Moto #{{i+1}}
-            <span *ngIf="moto.status !== null">{{moto.status ? ' enviado com sucesso' : ' não foi possível enviar'}}</span>
+            <span *ngIf="moto.status !== null">{{moto.status ? ' enviado com sucesso' : ' não foi possível
+                enviar'}}</span>
         </div>
         <mat-list-item>
             <div mat-line>Dados da Moto</div>
@@ -54,7 +70,9 @@
     <mat-card-actions>
         <button type="reset" mat-button (click)="cancelar();">Cancelar</button>
         <button type="submit" mat-raised-button color="primary" (click)="onSubmit(entrada, motos)"
-            [disabled]="isCarregando" [matBadge]="total" matBadgeColor="accent" [matBadgeHidden]="isCarregando">{{!isCarregando ? 'Enviar' : 'Enviando ' + contador + '/' + total }}</button>
+            [disabled]="isCarregando" [matBadge]="total" matBadgeColor="accent"
+            [matBadgeHidden]="isCarregando">{{!isCarregando ? 'Enviar' : 'Enviando ' + contador + '/' + total
+            }}</button>
     </mat-card-actions>
 </mat-card>
 <ng-template #elseIf>
