@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { SaidasEstoqueVeiculoZeroKm } from '../../interfaces/saidas-estoque-veiculo-zero-km';
 import { environment } from 'src/environments/environment';
 import { AuthService } from 'src/app/services/auth.service';
 import { Usuario } from 'src/app/interfaces/usuario';
@@ -19,7 +18,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 })
 export class TransferenciaEstoqueZeroKmComponent implements OnInit {
   isCarregando = false;
-  saidasEstoqueVeiculoZeroKm: SaidasEstoqueVeiculoZeroKm = {
+  transferenciaEstoqueVeiculoZeroKm: any = {
     chaveNotaFiscal: '',
     comprador: {
       email: '',
@@ -96,33 +95,34 @@ export class TransferenciaEstoqueZeroKmComponent implements OnInit {
           if (CNPJ_EMIT === usuario?.cnpj!) {
             // Dados do comprador
             const compradorDoc = xmlDoc.documentElement.getElementsByTagName('dest')[0];
-            this.saidasEstoqueVeiculoZeroKm.comprador.nome = compradorDoc.getElementsByTagName('xNome')[0].textContent!;
-            this.saidasEstoqueVeiculoZeroKm.comprador.email = compradorDoc.getElementsByTagName('email').length ? compradorDoc.getElementsByTagName('email')[0].textContent! : '';
+            this.transferenciaEstoqueVeiculoZeroKm.comprador.nome = compradorDoc.getElementsByTagName('xNome')[0].textContent!;
+            this.transferenciaEstoqueVeiculoZeroKm.comprador.email = compradorDoc.getElementsByTagName('email').length ? compradorDoc.getElementsByTagName('email')[0].textContent! : '';
             if (compradorDoc.getElementsByTagName('CNPJ').length > 0) {
-              this.saidasEstoqueVeiculoZeroKm.comprador.numeroDocumento = compradorDoc.getElementsByTagName('CNPJ')[0].textContent!;
-              this.saidasEstoqueVeiculoZeroKm.comprador.tipoDocumento = 'CNPJ';
+              this.transferenciaEstoqueVeiculoZeroKm.comprador.numeroDocumento = compradorDoc.getElementsByTagName('CNPJ')[0].textContent!;
+              this.transferenciaEstoqueVeiculoZeroKm.comprador.tipoDocumento = 'CNPJ';
             } else if (compradorDoc.getElementsByTagName('CPF').length > 0) {
-              this.saidasEstoqueVeiculoZeroKm.comprador.tipoDocumento = 'CPF';
-              this.saidasEstoqueVeiculoZeroKm.comprador.numeroDocumento = compradorDoc.getElementsByTagName('CPF')[0].textContent!;
+              this.transferenciaEstoqueVeiculoZeroKm.comprador.tipoDocumento = 'CPF';
+              this.transferenciaEstoqueVeiculoZeroKm.comprador.numeroDocumento = compradorDoc.getElementsByTagName('CPF')[0].textContent!;
             }
             const endereco = compradorDoc.getElementsByTagName('enderDest')[0];
-            this.saidasEstoqueVeiculoZeroKm.comprador.endereco.logradouro = endereco.getElementsByTagName('xLgr')[0].textContent!;
-            this.saidasEstoqueVeiculoZeroKm.comprador.endereco.numero = endereco.getElementsByTagName('nro')[0].textContent!;
-            this.saidasEstoqueVeiculoZeroKm.comprador.endereco.bairro = endereco.getElementsByTagName('xBairro')[0].textContent!;
+            this.transferenciaEstoqueVeiculoZeroKm.comprador.endereco.logradouro = endereco.getElementsByTagName('xLgr')[0].textContent!;
+            this.transferenciaEstoqueVeiculoZeroKm.comprador.endereco.numero = endereco.getElementsByTagName('nro')[0].textContent!;
+            this.transferenciaEstoqueVeiculoZeroKm.comprador.endereco.bairro = endereco.getElementsByTagName('xBairro')[0].textContent!;
             const municipio = endereco.getElementsByTagName('xMun')[0].textContent!;
             const uf = endereco.getElementsByTagName('UF')[0].textContent!;
             console.log(municipio, uf);
             const idMunicipio = this.filtraMunicipio(municipio, uf);
-            this.saidasEstoqueVeiculoZeroKm.comprador.endereco.codigoMunicipio = parseInt(idMunicipio[0].id);
+            this.transferenciaEstoqueVeiculoZeroKm.comprador.endereco.codigoMunicipio = parseInt(idMunicipio[0].id);
             this.cidadeUf = municipio + '-' + uf;
-            this.saidasEstoqueVeiculoZeroKm.comprador.endereco.cep = endereco.getElementsByTagName('CEP')[0].textContent!;
+            this.transferenciaEstoqueVeiculoZeroKm.comprador.endereco.cep = endereco.getElementsByTagName('CEP')[0].textContent!;
 
             // Dados da NF-e
-            this.saidasEstoqueVeiculoZeroKm.chaveNotaFiscal = xmlDoc.getElementsByTagName('chNFe')[0].textContent!;
-            this.saidasEstoqueVeiculoZeroKm.dataVenda = xmlDoc.getElementsByTagName('dhRecbto')[0].textContent!.substring(0, 19);
-            this.saidasEstoqueVeiculoZeroKm.valorVenda = parseInt(xmlDoc.getElementsByTagName('vNF')[0].textContent!);
-            this.saidasEstoqueVeiculoZeroKm.emailEstabelecimento = xmlDoc.getElementsByTagName('infRespTec').length ? xmlDoc.getElementsByTagName('infRespTec')[0].getElementsByTagName('email')[0].textContent! : '';
-            console.log('saidasEstoqueVeiculoZeroKm 2', this.saidasEstoqueVeiculoZeroKm);
+            this.transferenciaEstoqueVeiculoZeroKm.chaveNotaFiscal = xmlDoc.getElementsByTagName('chNFe')[0].textContent!;
+            this.transferenciaEstoqueVeiculoZeroKm.dataEntradaEstoque = xmlDoc.getElementsByTagName('dhEmi')[0].textContent!.substring(0, 19);
+            this.transferenciaEstoqueVeiculoZeroKm.dataHoraMedicaoHodometro = this.transferenciaEstoqueVeiculoZeroKm.dataEntradaEstoque;
+            this.transferenciaEstoqueVeiculoZeroKm.valorVenda = parseInt(xmlDoc.getElementsByTagName('vNF')[0].textContent!);
+            this.transferenciaEstoqueVeiculoZeroKm.emailEstabelecimento = xmlDoc.getElementsByTagName('infRespTec').length ? xmlDoc.getElementsByTagName('infRespTec')[0].getElementsByTagName('email')[0].textContent! : '';
+            console.log('transferenciaEstoqueVeiculoZeroKm 2', this.transferenciaEstoqueVeiculoZeroKm);
 
             //MOTOS
             this.motos = [];
@@ -130,16 +130,17 @@ export class TransferenciaEstoqueZeroKmComponent implements OnInit {
             this.total = veiculos.length;
             for (let index = 0; index < veiculos.length; index++) {
               const moto = veiculos[index];
-              let motoInsert = { motoInline: '', idEstoque: 0, status: null };
+              let motoInsert = { motoInline: '', idEstoque: 0, descricao: '', status: null };
               const motoInline = xmlDoc.documentElement.getElementsByTagName("infAdProd")[0].textContent!;
               motoInsert.motoInline = motoInline;
               // CHASSI
-              this.saidasEstoqueVeiculoZeroKm.idEstoque = null;
+              this.transferenciaEstoqueVeiculoZeroKm.idEstoque = null;
               // Verifica se o produto no XML contém Veículo
               const veicProd = moto.getElementsByTagName('prod')[0].getElementsByTagName('veicProd');
               let cProd = moto.getElementsByTagName('prod')[0].getElementsByTagName('cProd')[0].textContent!;
-              this.saidasEstoqueVeiculoZeroKm.idEstoque = parseInt(cProd);
+              this.transferenciaEstoqueVeiculoZeroKm.idEstoque = parseInt(cProd);
               motoInsert.idEstoque = parseInt(cProd);
+              motoInsert.descricao = moto.getElementsByTagName('prod')[0].getElementsByTagName('xProd')[0].textContent!;
               this.motos.push(motoInsert);
               this.isCarregando = false;
             }
@@ -164,9 +165,17 @@ export class TransferenciaEstoqueZeroKmComponent implements OnInit {
         'pwd': usuario?.pwd!,
       })
     };
-    this.saidasEstoqueVeiculoZeroKm.idEstoque = this.motos[this.contador].idEstoque!;
-    console.log(this.saidasEstoqueVeiculoZeroKm);
-    this.http.post(environment.urlRenave + 'renave/estoque/sair-veiculozerokm', this.saidasEstoqueVeiculoZeroKm, httpOptions).pipe().subscribe(
+    const setTransferencia = {
+      cnpjEstabelecimentoDestino: this.transferenciaEstoqueVeiculoZeroKm.comprador.numeroDocumento,
+      chassi: 'LP6XCBL01N0R46992',
+      chaveNotaFiscal: this.transferenciaEstoqueVeiculoZeroKm.chaveNotaFiscal,
+      dataTransferenciaEstoque: this.transferenciaEstoqueVeiculoZeroKm.dataEntradaEstoque,
+      dataHoraMedicaoHodometro: this.transferenciaEstoqueVeiculoZeroKm.dataHoraMedicaoHodometro,
+      quilometragemHodometro: 0,
+      valor: this.transferenciaEstoqueVeiculoZeroKm.valorVenda
+    };
+    console.log(setTransferencia);
+    this.http.post(environment.urlRenave + 'renave/estoque/transferir-veiculozerokm', setTransferencia, httpOptions).pipe().subscribe(
       (res => {
         console.log('passou', res);
         this.motos[this.contador].status = true;
@@ -209,7 +218,7 @@ export class TransferenciaEstoqueZeroKmComponent implements OnInit {
 
   cancelar() {
     this.motos = [];
-    this.saidasEstoqueVeiculoZeroKm = {
+    this.transferenciaEstoqueVeiculoZeroKm = {
       chaveNotaFiscal: '',
       comprador: {
         email: '',

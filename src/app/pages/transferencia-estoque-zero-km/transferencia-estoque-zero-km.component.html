@@ -9,7 +9,7 @@
 <div style="height: 6px;">
     <mat-progress-bar color="accent" mode="indeterminate" *ngIf="isCarregando"></mat-progress-bar>
 </div>
-<mat-card *ngIf="saidasEstoqueVeiculoZeroKm.chaveNotaFiscal; else elseIf">
+<mat-card *ngIf="transferenciaEstoqueVeiculoZeroKm.chaveNotaFiscal; else elseIf">
     <mat-card-title style="color: #112a6a">Dados da nota fiscal</mat-card-title>
     <mat-card-subtitle>{{fileName}}</mat-card-subtitle>
     <div class="table">
@@ -24,15 +24,11 @@
                     <div mat-subheader style="color: #112a6a">Destinatário</div>
                     <mat-list-item>
                         <div mat-line>Nome</div>
-                        <div mat-line>{{saidasEstoqueVeiculoZeroKm.comprador.nome}}</div>
+                        <div mat-line>{{transferenciaEstoqueVeiculoZeroKm.comprador.nome}}</div>
                     </mat-list-item>
                     <mat-list-item>
-                        <div mat-line>E-mail</div>
-                        <div mat-line>{{saidasEstoqueVeiculoZeroKm.comprador.email}}</div>
-                    </mat-list-item>
-                    <mat-list-item>
-                        <div mat-line>{{saidasEstoqueVeiculoZeroKm.comprador.tipoDocumento}}</div>
-                        <div mat-line>{{saidasEstoqueVeiculoZeroKm.comprador.numeroDocumento}}</div>
+                        <div mat-line>{{transferenciaEstoqueVeiculoZeroKm.comprador.tipoDocumento}}</div>
+                        <div mat-line>{{transferenciaEstoqueVeiculoZeroKm.comprador.numeroDocumento}}</div>
                     </mat-list-item>
                 </mat-list>
             </div>
@@ -41,16 +37,16 @@
                     <div mat-subheader style="color: #112a6a">Endereço</div>
                     <mat-list-item>
                         <div mat-line>Logradouro</div>
-                        <div mat-line>{{saidasEstoqueVeiculoZeroKm.comprador.endereco.logradouro}},
-                            {{saidasEstoqueVeiculoZeroKm.comprador.endereco.numero}}</div>
+                        <div mat-line>{{transferenciaEstoqueVeiculoZeroKm.comprador.endereco.logradouro}},
+                            {{transferenciaEstoqueVeiculoZeroKm.comprador.endereco.numero}}</div>
                     </mat-list-item>
                     <mat-list-item>
                         <div mat-line>Bairro</div>
-                        <div mat-line>{{saidasEstoqueVeiculoZeroKm.comprador.endereco.bairro}}</div>
+                        <div mat-line>{{transferenciaEstoqueVeiculoZeroKm.comprador.endereco.bairro}}</div>
                     </mat-list-item>
                     <mat-list-item>
                         <div mat-line>CEP</div>
-                        <div mat-line>{{saidasEstoqueVeiculoZeroKm.comprador.endereco.cep}}</div>
+                        <div mat-line>{{transferenciaEstoqueVeiculoZeroKm.comprador.endereco.cep}}</div>
                     </mat-list-item>
                     <mat-list-item>
                         <div mat-line>Município e estado</div>
@@ -65,15 +61,15 @@
                 <mat-list>
                     <mat-list-item>
                         <div mat-line>Chave da Nota Fiscal</div>
-                        <div mat-line>{{saidasEstoqueVeiculoZeroKm.chaveNotaFiscal}}</div>
+                        <div mat-line>{{transferenciaEstoqueVeiculoZeroKm.chaveNotaFiscal}}</div>
                     </mat-list-item>
                     <mat-list-item>
                         <div mat-line>Data da venda</div>
-                        <div mat-line>{{saidasEstoqueVeiculoZeroKm.dataVenda}}</div>
+                        <div mat-line>{{transferenciaEstoqueVeiculoZeroKm.dataVenda}}</div>
                     </mat-list-item>
                     <mat-list-item>
                         <div mat-line>Valor da venda</div>
-                        <div mat-line>{{saidasEstoqueVeiculoZeroKm.valorVenda | currency}}</div>
+                        <div mat-line>{{transferenciaEstoqueVeiculoZeroKm.valorVenda | currency}}</div>
                     </mat-list-item>
                 </mat-list>
             </div>
@@ -82,7 +78,7 @@
                 <mat-list>
                     <mat-list-item>
                         <div mat-line>E-mail</div>
-                        <div mat-line>{{saidasEstoqueVeiculoZeroKm.emailEstabelecimento}}</div>
+                        <div mat-line>{{transferenciaEstoqueVeiculoZeroKm.emailEstabelecimento}}</div>
                     </mat-list-item>
                 </mat-list>
             </div>
@@ -91,7 +87,7 @@
     <div>
         <h2 class="mat-title" style="color: #ff6610;margin-bottom: 0">Motos</h2>
         <mat-list *ngFor="let moto of motos; index as i">
-            <div mat-subheader>Moto #{{i+1}}</div>
+            <div mat-subheader>#{{i+1}} {{moto.descricao}}</div>
             <mat-list-item>
                 <div mat-line>Dados da Moto</div>
                 <div mat-line><small class="caption">{{moto.motoInline}}</small></div>
