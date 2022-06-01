@@ -6,6 +6,9 @@
     </button>
     <input hidden (change)="onFileSelected()" #fileInput type="file" id="file" accept="text/xml">
 </mat-toolbar>
+<div style="height: 6px;">
+    <mat-progress-bar color="accent" mode="indeterminate" *ngIf="isCarregando"></mat-progress-bar>
+</div>
 <mat-card *ngIf="entrada.chaveNotaFiscal; else elseIf">
     <mat-card-title style="color: #112a6a">Dados da nota fiscal</mat-card-title>
     <mat-card-subtitle>{{fileName}}</mat-card-subtitle>
@@ -36,13 +39,14 @@
             <div mat-line>Endereço</div>
             <div mat-line>{{entrada.origem.endereco.logradouro + ', ' + entrada.origem.endereco.numero + ' - ' +
                 entrada.origem.endereco.bairro + ', ' + entrada.origem.endereco.municipio.nome + '-' +
-                entrada.origem.endereco.municipio.uf}}<br>{{entrada.origem.endereco.cep.substring(0, 5) + '-' + entrada.origem.endereco.cep.substring(5)}}</div>
+                entrada.origem.endereco.municipio.uf}}<br>{{entrada.origem.endereco.cep.substring(0, 5) + '-' +
+                entrada.origem.endereco.cep.substring(5)}}</div>
         </mat-list-item>
     </mat-list>
     <h2 class="mat-title" style="color: #ff6610">Motos</h2>
     <mat-list *ngFor="let moto of motos; index as i">
         <div mat-subheader>
-            Moto #{{i+1}}
+            #{{i+1}} {{moto.descricao}}
             <span *ngIf="moto.status !== null">{{moto.status ? ' enviado com sucesso' : ' não foi possível
                 enviar'}}</span>
         </div>

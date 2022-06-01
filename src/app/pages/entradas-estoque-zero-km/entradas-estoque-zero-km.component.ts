@@ -184,7 +184,7 @@ export class EntradasEstoqueZeroKmComponent implements OnInit {
             motoInsert.motoInline = moto.getElementsByTagName("infAdProd")[0].textContent!;
             const prod = moto.getElementsByTagName("prod")[0];
             motoInsert.chassi = prod.getElementsByTagName("chassi")[0].textContent!;
-            motoInsert.descricao = '';
+            motoInsert.descricao = prod.getElementsByTagName("xProd")[0].textContent!;
             motoInsert.cor = prod.getElementsByTagName("xCor")[0].textContent!;
             motoInsert.cilindrada = prod.getElementsByTagName("cilin")[0].textContent!;
             motoInsert.anoModelo = prod.getElementsByTagName("anoMod")[0].textContent!;
