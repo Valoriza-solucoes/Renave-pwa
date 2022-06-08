@@ -112,7 +112,9 @@ export class SaidasEstoqueVeiculoZeroKmComponent implements OnInit {
             const uf = endereco.getElementsByTagName('UF')[0].textContent!;
             console.log(municipio, uf);
             const idMunicipio = this.filtraMunicipio(municipio, uf);
-            this.saidasEstoqueVeiculoZeroKm.comprador.endereco.codigoMunicipio = parseInt(idMunicipio[0].id);
+            if (idMunicipio.length) {
+              this.saidasEstoqueVeiculoZeroKm.comprador.endereco.codigoMunicipio = parseInt(idMunicipio[0].id);
+            }
             this.cidadeUf = municipio + '-' + uf;
             this.saidasEstoqueVeiculoZeroKm.comprador.endereco.cep = endereco.getElementsByTagName('CEP')[0].textContent!;
 
@@ -130,8 +132,12 @@ export class SaidasEstoqueVeiculoZeroKmComponent implements OnInit {
             for (let index = 0; index < veiculos.length; index++) {
               const moto = veiculos[index];
               let motoInsert = { motoInline: '', idEstoque: '', status: null };
-              const motoInline = xmlDoc.documentElement.getElementsByTagName("infAdProd")[0].textContent!;
-              motoInsert.motoInline = motoInline;
+              const motoInlineXML = xmlDoc.documentElement.getElementsByTagName("infAdProd");
+              if (motoInlineXML.length) {
+                motoInsert.motoInline = motoInlineXML[0].textContent!;
+              } else {
+                motoInsert.motoInline = xmlDoc.documentElement.getElementsByTagName("xProd")[0].textContent!;
+              }
               // CHASSI
               this.saidasEstoqueVeiculoZeroKm.idEstoque = null;
               // Verifica se o produto no XML contém Veículo
