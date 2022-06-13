@@ -43,25 +43,16 @@ export class SaidasEstoqueVeiculoZeroKmComponent implements OnInit {
 
   cidadeUf = '';
   municipioCtrl = new FormControl();
-  filteredMunicipio: Observable<Municipio[]> | undefined;
   municipios: Municipio[] = municipios;
   fileName = '';
   motos: any = [];
   contador = 0;
   total = 0;
 
-  constructor(private http: HttpClient, private auth: AuthService, private estoque: EstoqueService, private snackbar: MatSnackBar) {
-    this.filteredMunicipio = this.municipioCtrl.valueChanges.pipe(
-      startWith(''),
-      map(municipio => (municipio ? this._filterMunicipios(municipio) : this.municipios.slice())),
-    );
-  }
-  private _filterMunicipios(value: string): Municipio[] {
-    const filterValue = value.toLowerCase();
-    return this.municipios.filter(municipio => municipio.nome.toLowerCase().includes(filterValue));
-  }
+  constructor(private http: HttpClient, private auth: AuthService, private estoque: EstoqueService, private snackbar: MatSnackBar) { }
+
   filtraMunicipio(value: string, uf: string): Municipio[] {
-    return this.municipios.filter(municipio => municipio.nome == value && municipio.uf == uf);
+    return this.municipios.filter(municipio => municipio.nome == value.toUpperCase() && municipio.uf == uf.toUpperCase());
   }
 
   ngOnInit(): void {
@@ -110,13 +101,15 @@ export class SaidasEstoqueVeiculoZeroKmComponent implements OnInit {
             this.saidasEstoqueVeiculoZeroKm.comprador.endereco.bairro = endereco.getElementsByTagName('xBairro')[0].textContent!;
             const municipio = endereco.getElementsByTagName('xMun')[0].textContent!;
             const uf = endereco.getElementsByTagName('UF')[0].textContent!;
-            console.log(municipio, uf);
+            console.log('\'' + municipio + '-' + uf + '\'');
             const idMunicipio = this.filtraMunicipio(municipio, uf);
+            console.log(idMunicipio);
             if (idMunicipio.length) {
               this.saidasEstoqueVeiculoZeroKm.comprador.endereco.codigoMunicipio = parseInt(idMunicipio[0].id);
             }
             this.cidadeUf = municipio + '-' + uf;
-            this.saidasEstoqueVeiculoZeroKm.comprador.endereco.cep = endereco.getElementsByTagName('CEP')[0].textContent!;
+            const CEPXml = endereco.getElementsByTagName('CEP');
+            this.saidasEstoqueVeiculoZeroKm.comprador.endereco.cep = CEPXml.length > 0 ? CEPXml[0].textContent! : '';
 
             // Dados da NF-e
             this.saidasEstoqueVeiculoZeroKm.chaveNotaFiscal = xmlDoc.getElementsByTagName('chNFe')[0].textContent!;
