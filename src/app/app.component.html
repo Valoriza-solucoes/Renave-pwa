@@ -14,6 +14,10 @@
     <mat-drawer #drawer mode="side" opened>
       <mat-nav-list role="list" style="padding-top: 0;height: 100%">
         <div style="height: 8px;"></div>
+        <a mat-list-item role="listitem" routerLink="transferencia-estoque-veiculo-zero-km">
+          <mat-icon mat-list-icon>sync</mat-icon>
+          <div mat-line>Transferência</div>
+        </a>
         <a mat-list-item role="listitem" routerLink="/">
           <mat-icon mat-list-icon>two_wheeler</mat-icon>
           <div mat-line>Estoques</div>
@@ -25,10 +29,6 @@
         <a mat-list-item role="listitem" routerLink="saidas-estoque-veiculo-zero-km">
           <mat-icon mat-list-icon>logout</mat-icon>
           <div mat-line>Saída</div>
-        </a>
-        <a mat-list-item role="listitem" routerLink="transferencia-estoque-veiculo-zero-km">
-          <mat-icon mat-list-icon>sync</mat-icon>
-          <div mat-line>Transferência</div>
         </a>
       </mat-nav-list>
       <p style="text-align: center;margin-top: -56px;"><img src="assets/logo-avelloz.svg" alt="Logo Avelloz" height="36"></p>

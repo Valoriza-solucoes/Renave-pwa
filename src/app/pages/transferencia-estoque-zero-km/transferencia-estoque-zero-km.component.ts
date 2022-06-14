@@ -130,9 +130,10 @@ export class TransferenciaEstoqueZeroKmComponent implements OnInit {
             this.total = veiculos.length;
             for (let index = 0; index < veiculos.length; index++) {
               const moto = veiculos[index];
-              let motoInsert = { motoInline: '', idEstoque: 0, descricao: '', status: null };
+              let motoInsert = { motoInline: '', idEstoque: 0, chassi: '', descricao: '', status: null };
               const motoInline = xmlDoc.documentElement.getElementsByTagName("infAdProd")[0].textContent!;
               motoInsert.motoInline = motoInline;
+              motoInsert.chassi = motoInline.substring(8, 25);
               // CHASSI
               this.transferenciaEstoqueVeiculoZeroKm.idEstoque = null;
               // Verifica se o produto no XML contém Veículo
@@ -167,7 +168,7 @@ export class TransferenciaEstoqueZeroKmComponent implements OnInit {
     };
     const setTransferencia = {
       cnpjEstabelecimentoDestino: this.transferenciaEstoqueVeiculoZeroKm.comprador.numeroDocumento,
-      chassi: 'LP6XCBL01N0R46992',
+      chassi: this.motos[0].chassi,
       chaveNotaFiscal: this.transferenciaEstoqueVeiculoZeroKm.chaveNotaFiscal,
       dataTransferenciaEstoque: this.transferenciaEstoqueVeiculoZeroKm.dataEntradaEstoque,
       dataHoraMedicaoHodometro: this.transferenciaEstoqueVeiculoZeroKm.dataHoraMedicaoHodometro,
@@ -196,8 +197,10 @@ export class TransferenciaEstoqueZeroKmComponent implements OnInit {
         if (err.error) {
           if (err.error.mensagemParaUsuarioFinal) {
             msg = err.error.mensagemParaUsuarioFinal;
-          } else {
+          } else if (err.error.detalhe) {
             msg = err.error.detalhe;
+          } else {
+            msg = err.error.erro;
           }
         } else if (err.message) {
           msg = err.message;
