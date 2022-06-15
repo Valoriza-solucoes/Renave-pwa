@@ -47,8 +47,9 @@
     <mat-list *ngFor="let moto of motos; index as i">
         <div mat-subheader>
             #{{i+1}} {{moto.descricao}}
-            <span *ngIf="moto.status !== null">{{moto.status ? ' enviado com sucesso' : ' não foi possível
-                enviar'}}</span>
+            <span *ngIf="moto.status !== null">
+                {{moto.status ? ': enviado com sucesso' : ': não foi possível enviar'}}
+            </span>
         </div>
         <mat-list-item>
             <div mat-line>Dados da Moto</div>

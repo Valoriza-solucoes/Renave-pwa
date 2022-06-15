@@ -125,6 +125,9 @@ export class EntradasEstoqueZeroKmComponent implements OnInit {
       }
     }, (err) => {
       console.log(err);
+      this.snackbar.open(err.error.detalhe, 'Fechar', {
+        duration: 3000
+      });
       this.motos[this.contador].status = false;
       this.contador++;
       if (this.contador < this.total) {
