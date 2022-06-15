@@ -5,6 +5,7 @@ import { environment } from 'src/environments/environment';
 import { AuthService } from 'src/app/services/auth.service';
 import { Usuario } from 'src/app/interfaces/usuario';
 import { EstoqueService } from 'src/app/services/estoque.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-estoque',
@@ -21,7 +22,7 @@ export class EstoqueComponent implements OnInit {
 
   displayedColumns: string[] = ['estado', 'chassi', 'dataHoraEntrada', 'dataHoraSaida'];
   estoques: any = [{ id: 0, estado: "", codigoSegurancaCrv: null, numeroCrv: null, placa: null, renavam: null, chassi: "", tipoCrv: null, quilometragemHodometro: 0, dataHoraMedicaoHodometro: "", entradaEstoque: { cpfOperadorResponsavel: "", dataHora: "", chaveNotaFiscalEntrada: "", dataHoraEnvioNotaFiscalEntrada: "", numeroTermoEntradaEstoque: null, vendedor: null }, saidaEstoque: null, cancelamentoEstoque: null, restricoesVeiculo: [{ codigoTipoRestricao: "", tipoRestricao: "" }], origemPorCancelamentoEstoque: null }];
-  constructor(private formBuilder: FormBuilder, private estoque: EstoqueService, private http: HttpClient, private auth: AuthService) { }
+  constructor(private formBuilder: FormBuilder, private estoque: EstoqueService, private http: HttpClient, private auth: AuthService, private snackbar: MatSnackBar) { }
 
   ngOnInit(): void {
     // this.estoques = this.estoque.getEstoque();
@@ -36,7 +37,9 @@ export class EstoqueComponent implements OnInit {
       })
     };
     console.log(environment.urlRenave + 'renave/estoque');
-    this.http.get(environment.urlRenave + 'renave/estoque', httpOptions).pipe().subscribe((res => { console.log('passou'); this.estoques = res; }), (err => console.log(err)));
+    this.http.get(environment.urlRenave + 'renave/estoque', httpOptions).pipe().subscribe((res => { console.log('passou'); this.estoques = res; }), (err => {
+      console.log(err);
+    }));
   }
 
   buscar() {
@@ -57,6 +60,10 @@ export class EstoqueComponent implements OnInit {
     }), (err => {
       console.log(err);
       this.estoques = [{ id: 0, estado: "", codigoSegurancaCrv: null, numeroCrv: null, placa: null, renavam: null, chassi: "", tipoCrv: null, quilometragemHodometro: 0, dataHoraMedicaoHodometro: "", entradaEstoque: { cpfOperadorResponsavel: "", dataHora: "", chaveNotaFiscalEntrada: "", dataHoraEnvioNotaFiscalEntrada: "", numeroTermoEntradaEstoque: null, vendedor: null }, saidaEstoque: null, cancelamentoEstoque: null, restricoesVeiculo: [{ codigoTipoRestricao: "", tipoRestricao: "" }], origemPorCancelamentoEstoque: null }];
+      this.isCarregando = false;
+      this.snackbar.open(err.error.detalhe, 'Fechar', {
+        duration: 3000
+      });
     }), (() => this.isCarregando = false));
     // if (this.buscaForm.value.chassi) {
     //   const resultadoEstoque = this.estoque.getEstoqueChassi(this.buscaForm.value.chassi)!;
