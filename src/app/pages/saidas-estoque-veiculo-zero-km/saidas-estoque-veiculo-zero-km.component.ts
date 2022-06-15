@@ -7,7 +7,7 @@ import { Usuario } from 'src/app/interfaces/usuario';
 import { Municipio } from 'src/app/interfaces/municipio';
 import { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
-import { FormControl } from '@angular/forms';
+import { UntypedFormControl } from '@angular/forms';
 import { EstoqueService } from 'src/app/services/estoque.service';
 import { municipios } from 'src/assets/municipios';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -42,7 +42,7 @@ export class SaidasEstoqueVeiculoZeroKmComponent implements OnInit {
   };
 
   cidadeUf = '';
-  municipioCtrl = new FormControl();
+  municipioCtrl = new UntypedFormControl();
   municipios: Municipio[] = municipios;
   fileName = '';
   motos: any = [];

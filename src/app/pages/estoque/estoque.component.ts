@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
+import { UntypedFormBuilder } from '@angular/forms';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { AuthService } from 'src/app/services/auth.service';
@@ -22,7 +22,7 @@ export class EstoqueComponent implements OnInit {
 
   displayedColumns: string[] = ['estado', 'chassi', 'dataHoraEntrada', 'dataHoraSaida'];
   estoques: any = [{ id: 0, estado: "", codigoSegurancaCrv: null, numeroCrv: null, placa: null, renavam: null, chassi: "", tipoCrv: null, quilometragemHodometro: 0, dataHoraMedicaoHodometro: "", entradaEstoque: { cpfOperadorResponsavel: "", dataHora: "", chaveNotaFiscalEntrada: "", dataHoraEnvioNotaFiscalEntrada: "", numeroTermoEntradaEstoque: null, vendedor: null }, saidaEstoque: null, cancelamentoEstoque: null, restricoesVeiculo: [{ codigoTipoRestricao: "", tipoRestricao: "" }], origemPorCancelamentoEstoque: null }];
-  constructor(private formBuilder: FormBuilder, private estoque: EstoqueService, private http: HttpClient, private auth: AuthService, private snackbar: MatSnackBar) { }
+  constructor(private formBuilder: UntypedFormBuilder, private estoque: EstoqueService, private http: HttpClient, private auth: AuthService, private snackbar: MatSnackBar) { }
 
   ngOnInit(): void {
     // this.estoques = this.estoque.getEstoque();

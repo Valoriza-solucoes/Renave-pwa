@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
+import { UntypedFormBuilder } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { environment } from 'src/environments/environment';
 import { Usuario } from './interfaces/usuario';
@@ -19,7 +19,7 @@ export class AppComponent {
     pwd: '',
   });
 
-  constructor(public dialog: MatDialog, private auth: AuthService, private formBuilder: FormBuilder) { }
+  constructor(public dialog: MatDialog, private auth: AuthService, private formBuilder: UntypedFormBuilder) { }
 
   openDialog() {
     const dialogRef = this.dialog.open(ClienteAutenticadoComponent);
