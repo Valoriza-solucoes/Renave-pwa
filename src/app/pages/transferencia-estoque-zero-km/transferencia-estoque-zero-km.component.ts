@@ -91,7 +91,6 @@ export class TransferenciaEstoqueZeroKmComponent implements OnInit {
           const usuario: Usuario = this.auth.getUsuario();
           const CPNJ_XML = xmlDoc.documentElement.getElementsByTagName("emit")[0].getElementsByTagName("CNPJ");
           const CNPJ_EMIT = CPNJ_XML.length ? xmlDoc.documentElement.getElementsByTagName("emit")[0].getElementsByTagName("CNPJ")[0].textContent : '';
-          console.log(CNPJ_EMIT);
           if (CNPJ_EMIT === usuario?.cnpj!) {
             // Dados do comprador
             const compradorDoc = xmlDoc.documentElement.getElementsByTagName('dest')[0];
@@ -122,7 +121,6 @@ export class TransferenciaEstoqueZeroKmComponent implements OnInit {
             this.transferenciaEstoqueVeiculoZeroKm.dataHoraMedicaoHodometro = this.transferenciaEstoqueVeiculoZeroKm.dataEntradaEstoque;
             this.transferenciaEstoqueVeiculoZeroKm.valorVenda = parseInt(xmlDoc.getElementsByTagName('vNF')[0].textContent!);
             this.transferenciaEstoqueVeiculoZeroKm.emailEstabelecimento = xmlDoc.getElementsByTagName('infRespTec').length ? xmlDoc.getElementsByTagName('infRespTec')[0].getElementsByTagName('email')[0].textContent! : '';
-            console.log('transferenciaEstoqueVeiculoZeroKm 2', this.transferenciaEstoqueVeiculoZeroKm);
 
             //MOTOS
             this.motos = [];

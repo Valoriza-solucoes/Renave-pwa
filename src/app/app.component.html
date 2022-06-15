@@ -14,14 +14,6 @@
     <mat-drawer #drawer mode="side" opened>
       <mat-nav-list role="list" style="padding-top: 0;height: 100%">
         <div style="height: 8px;"></div>
-        <a mat-list-item role="listitem" routerLink="transferencia-estoque-veiculo-zero-km">
-          <mat-icon mat-list-icon>sync</mat-icon>
-          <div mat-line>Transferência</div>
-        </a>
-        <a mat-list-item role="listitem" routerLink="/">
-          <mat-icon mat-list-icon>two_wheeler</mat-icon>
-          <div mat-line>Estoques</div>
-        </a>
         <a mat-list-item role="listitem" routerLink="entradas-estoque-zero-km">
           <mat-icon mat-list-icon>login</mat-icon>
           <div mat-line>Entrada</div>
@@ -29,6 +21,14 @@
         <a mat-list-item role="listitem" routerLink="saidas-estoque-veiculo-zero-km">
           <mat-icon mat-list-icon>logout</mat-icon>
           <div mat-line>Saída</div>
+        </a>
+        <a mat-list-item role="listitem" routerLink="transferencia-estoque-veiculo-zero-km">
+          <mat-icon mat-list-icon>sync</mat-icon>
+          <div mat-line>Transferência</div>
+        </a>
+        <a mat-list-item role="listitem" routerLink="/">
+          <mat-icon mat-list-icon>two_wheeler</mat-icon>
+          <div mat-line>Estoques</div>
         </a>
       </mat-nav-list>
       <p style="text-align: center;margin-top: -56px;"><img src="assets/logo-avelloz.svg" alt="Logo Avelloz" height="36"></p>
@@ -65,7 +65,7 @@
       <mat-card-actions align="end">
         <button type="submit" mat-button mat-raised-button color="primary" [disabled]="isCarregando"><mat-icon>login</mat-icon> {{isCarregando ? 'Logando...' : 'Logar'}}</button>
       </mat-card-actions>
-      <p class="mat-small" style="text-align: center;position: relative; bottom: -16px;color: gray"><small>Versão {{ prod ? '2022.06.13.1' : 'local'}}</small></p>
+      <p class="mat-small" style="text-align: center;position: relative; bottom: -16px;color: gray"><small>Versão {{ prod ? '2022.06.14.2' : 'local'}}</small></p>
     </mat-card>
   </form>
 </ng-template>
